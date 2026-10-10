@@ -1,0 +1,131 @@
+/* ===== כפתור צף - תמיד נראה ===== */
+.chef-fab               { @apply fixed bottom-5 end-5 z-40 inline-flex items-center gap-2 bg-brand-500 text-white border-0 cursor-pointer rounded-full shadow-warm transition-all duration-300;
+                          padding: 0.85rem 1.25rem; }
+.chef-fab i             { @apply text-base; }
+.chef-fab__label        { @apply text-sm font-bold; }
+@media (hover: hover) { .chef-fab:hover { @apply bg-brand-600 -translate-y-0.5; transform: translateY(-2px) scale(1.03); } }
+.chef-fab--open         { @apply bg-gray-900 rounded-full;
+                          padding: 0.85rem; width: 48px; height: 48px; justify-content: center; }
+.chef-fab--open i       { @apply text-lg; }
+
+/* ===== רקע כהה ===== */
+.chef-backdrop          { @apply fixed inset-0 z-30 bg-black/40 backdrop-blur-sm;
+                          animation: fadeIn 0.2s ease-out; }
+
+/* ===== מגירה צידית ===== */
+.chef-panel             { @apply fixed inset-y-0 end-0 z-40 w-full max-w-lg bg-white shadow-2xl flex flex-col;
+                          transform: translateX(-100%); transition: transform 0.3s ease-out; }
+.chef-panel--open       { transform: translateX(0); }
+
+/* כותרת המגירה */
+.chef-panel__head       { @apply flex items-center gap-3 px-5 sm:px-6 py-4 border-b border-gray-100 bg-gradient-to-l from-cream-50 to-white; }
+.chef-panel__head-icon  { @apply w-11 h-11 rounded-full bg-brand-500 text-white text-lg inline-flex items-center justify-center shadow-warm shrink-0; }
+.chef-panel__head-text  { @apply flex-1 min-w-0; }
+.chef-panel__title      { @apply text-lg sm:text-xl font-extrabold text-gray-900 m-0; }
+.chef-panel__subtitle   { @apply text-xs sm:text-sm text-gray-500 m-0; }
+.chef-panel__close      { @apply w-9 h-9 rounded-full bg-gray-100 text-gray-600 border-0 cursor-pointer inline-flex items-center justify-center transition-colors duration-200; }
+@media (hover: hover) { .chef-panel__close:hover { @apply bg-gray-900 text-white; } }
+
+/* גוף המגירה - גלילה */
+.chef-panel__body       { @apply flex-1 overflow-y-auto px-5 sm:px-6 py-5 flex flex-col gap-6; }
+
+/* ===== כפתורי התאמה מהירה ===== */
+.chef-actions__title    { @apply text-sm font-bold text-gray-900 m-0 mb-1 flex items-center gap-2; }
+.chef-actions__title i  { @apply text-brand-500 text-xs; }
+.chef-actions__hint     { @apply text-xs text-gray-500 m-0 mb-3; }
+.chef-actions__grid     { @apply grid grid-cols-2 sm:grid-cols-3 gap-2; }
+
+.adapt-btn              { @apply inline-flex items-center justify-center gap-2 bg-white border border-gray-200 text-gray-700 text-sm font-semibold px-3 py-2.5 rounded-xl cursor-pointer transition-all duration-200; }
+.adapt-btn i            { @apply text-xs text-brand-500; }
+.adapt-btn[disabled]    { @apply opacity-60 cursor-not-allowed; }
+@media (hover: hover) { .adapt-btn:not([disabled]):hover { @apply border-brand-400 -translate-y-0.5 shadow-sm bg-cream-50; } }
+.adapt-btn--loading     { @apply border-brand-500 bg-brand-50; }
+.adapt-btn--loading i, .adapt-btn--loading span { @apply text-brand-500; }
+
+/* ===== הודעת שגיאה ===== */
+.chef-error             { @apply flex items-center gap-2 px-4 py-3 rounded-xl bg-red-50 border border-red-200 text-red-700 text-sm font-semibold; }
+.chef-error i           { @apply text-base; }
+
+/* ===== תוצאת ההתאמה ===== */
+.adapted                { @apply bg-cream-50 border-2 border-brand-200 rounded-2xl p-5 flex flex-col gap-3; }
+.adapted__head          { @apply flex items-center justify-between gap-2; }
+.adapted__badge         { @apply inline-block bg-brand-500 text-white text-[10px] font-extrabold px-3 py-1 rounded-full uppercase tracking-wider shadow-warm; }
+.adapted__close         { @apply w-7 h-7 rounded-full bg-white text-gray-500 border border-gray-200 cursor-pointer inline-flex items-center justify-center transition-colors duration-200; }
+.adapted__close i       { @apply text-xs; }
+@media (hover: hover) { .adapted__close:hover { @apply bg-gray-900 text-white border-gray-900; } }
+.adapted__title         { @apply text-lg sm:text-xl font-extrabold text-gray-900 m-0 leading-tight; }
+.adapted__summary       { @apply text-sm text-gray-700 m-0 flex items-start gap-2 bg-white border border-cream-200 rounded-lg p-3; }
+.adapted__summary i     { @apply text-brand-500 text-xs mt-1 shrink-0; }
+.adapted__meta          { @apply text-xs text-gray-600 font-semibold; }
+.adapted__meta i        { @apply text-brand-500 me-1; }
+
+.adapted__section       { @apply mt-2; }
+.adapted__section h4    { @apply text-sm font-extrabold text-gray-900 m-0 mb-2 uppercase tracking-wider; }
+.adapted__ingredients   { @apply list-none p-0 m-0 flex flex-col gap-1.5; }
+.adapted__ingredients li { @apply flex items-baseline gap-2 text-sm text-gray-800; }
+.adapted__ingredients i { @apply w-4 h-4 rounded-full bg-brand-500 text-white text-[8px] inline-flex items-center justify-center self-center shrink-0; }
+.adapted__ingredients strong { @apply font-bold text-gray-900; }
+.adapted__steps         { @apply list-decimal ps-5 m-0 flex flex-col gap-2; }
+.adapted__steps li      { @apply text-sm text-gray-800 leading-relaxed; }
+
+/* ===== מקטע צ'אט ===== */
+.chef-chat__head        { @apply flex items-center justify-between mb-2; }
+.chef-chat__title       { @apply text-sm font-bold text-gray-900 m-0 flex items-center gap-2; }
+.chef-chat__title i     { @apply text-brand-500 text-xs; }
+.chef-chat__clear       { @apply inline-flex items-center gap-1 text-xs text-gray-500 bg-transparent border-0 cursor-pointer font-semibold; }
+.chef-chat__clear i     { @apply text-[10px]; }
+@media (hover: hover) { .chef-chat__clear:hover { @apply text-brand-500; } }
+
+/* הודעות */
+.chef-panel__messages   { @apply flex flex-col gap-3 bg-cream-50 border border-cream-200 rounded-2xl p-3 sm:p-4 max-h-[400px] overflow-y-auto; }
+
+/* מצב ריק לפני שמתחילים לכתוב */
+.chef-empty             { @apply flex flex-col items-center text-center py-4 text-gray-500; }
+.chef-empty > i         { @apply text-3xl text-brand-300 mb-2; }
+.chef-empty > p         { @apply text-sm m-0 mb-3; }
+.chef-empty__suggestions { @apply flex flex-wrap gap-1.5 justify-center; }
+.chef-empty__suggestion { @apply inline-flex bg-white border border-gray-200 text-gray-700 text-xs font-semibold px-3 py-1.5 rounded-full cursor-pointer transition-all duration-200; }
+@media (hover: hover) { .chef-empty__suggestion:hover { @apply border-brand-400 text-brand-500 -translate-y-0.5; } }
+
+/* הודעה */
+.msg                    { @apply flex gap-2 items-start; }
+.msg__avatar            { @apply w-7 h-7 rounded-full inline-flex items-center justify-center text-xs shrink-0; }
+.msg--user .msg__avatar { @apply bg-gray-200 text-gray-700; }
+.msg--model .msg__avatar { @apply bg-brand-500 text-white shadow-warm; }
+.msg__bubble            { @apply bg-white border border-gray-200 rounded-2xl px-3 py-2 text-sm text-gray-800 leading-relaxed max-w-[80%]; white-space: pre-line; }
+.msg--user .msg__bubble { @apply bg-brand-500 text-white border-brand-500; }
+.msg--user              { @apply flex-row-reverse; }
+.msg--user .msg__bubble { @apply text-end; }
+
+/* הודעת "חושב" - שלוש נקודות מנופחות */
+.msg__bubble--thinking  { @apply inline-flex items-center gap-1 py-3; }
+.msg__bubble--thinking span { @apply w-2 h-2 rounded-full bg-brand-400 inline-block;
+                              animation: dotPulse 1.4s ease-in-out infinite both; }
+.msg__bubble--thinking span:nth-child(1) { animation-delay: -0.32s; }
+.msg__bubble--thinking span:nth-child(2) { animation-delay: -0.16s; }
+
+/* שורת קלט */
+.chef-input             { @apply flex items-center gap-2 mt-3; }
+.chef-input input       { @apply flex-1 bg-white border border-gray-200 rounded-full px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 outline-none transition-all duration-200; }
+.chef-input input:focus { @apply border-brand-300 ring-2 ring-brand-100; }
+.chef-input__send       { @apply w-10 h-10 rounded-full bg-brand-500 text-white border-0 cursor-pointer inline-flex items-center justify-center shadow-warm transition-all duration-200 shrink-0; }
+.chef-input__send[disabled] { @apply opacity-50 cursor-not-allowed; }
+.chef-input__send i     { @apply text-sm; }
+@media (hover: hover) { .chef-input__send:not([disabled]):hover { @apply bg-brand-600 -translate-y-0.5; } }
+
+/* ספינר קטן */
+.spinner-small          { @apply w-4 h-4 border-2 border-brand-200 border-t-brand-500 rounded-full animate-spin inline-block; }
+
+/* אנימציות */
+@keyframes fadeIn  { from { opacity: 0; } to { opacity: 1; } }
+@keyframes dotPulse {
+  0%, 80%, 100% { transform: scale(0.6); opacity: 0.5; }
+  40%           { transform: scale(1);   opacity: 1; }
+}
+
+/* התאמת מובייל - המגירה ברוחב מלא */
+@media (max-width: 639px) {
+  .chef-panel           { @apply max-w-none; }
+  .chef-fab__label      { @apply hidden; }
+  .chef-fab             { padding: 0.85rem; }
+}

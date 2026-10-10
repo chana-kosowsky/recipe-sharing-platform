@@ -1,0 +1,246 @@
+<div class="search-page">
+
+  <!-- כותרת עליונה - באנר עריכתי -->
+  <header class="page-header">
+    <span class="page-header__eyebrow">מה יש לכם במטבח?</span>
+    <h1 class="page-header__title">חיפוש לפי רכיבים<span class="page-header__dot">.</span></h1>
+    <p class="page-header__subtitle">הזינו את הרכיבים שיש בבית — נמצא לכם את המתכונים המתאימים ביותר.</p>
+  </header>
+
+  <!-- שדה הוספת רכיב -->
+  <section class="add-box">
+    <div class="add-box__input-wrap">
+      <i class="fas fa-magnifying-glass add-box__icon"></i>
+      <input
+        type="text"
+        [(ngModel)]="currentIngredient"
+        (keyup.enter)="addIngredient()"
+        placeholder="הזינו רכיב (למשל: קמח, ביצים, סוכר)..."
+        class="add-box__input"
+        [disabled]="isSearching">
+
+      <button (click)="addIngredient()"
+              [disabled]="!currentIngredient.trim() || isSearching"
+              class="add-box__btn">
+        <i class="fas fa-plus"></i>
+        <span>הוסף</span>
+      </button>
+    </div>
+
+    @if (errorMessage) {
+      <div class="alert alert--error">
+        <i class="fas fa-circle-exclamation"></i>
+        <span>{{ errorMessage }}</span>
+      </div>
+    }
+  </section>
+
+  <!-- הצעות מהירות + ערכות - מוצגות עד שמתחילים לחפש -->
+  @if (!hasSearched) {
+
+    <!-- צ'יפים של רכיבים פופולריים -->
+    <section class="suggestions">
+      <div class="section-header">
+        <h2 class="section-title">רכיבים פופולריים</h2>
+        <span class="section-rule"></span>
+      </div>
+      <p class="section-hint">הוסיפו במהירות עם לחיצה אחת</p>
+
+      <div class="suggestions__grid">
+        @for (item of popularIngredients; track item) {
+          <button class="suggestion-chip"
+                  (click)="quickAdd(item)"
+                  [disabled]="isSearching"
+                  [class.added]="ingredients.includes(item)">
+            @if (ingredients.includes(item)) {
+              <i class="fas fa-check"></i>
+            } @else {
+              <i class="fas fa-plus"></i>
+            }
+            <span>{{ item }}</span>
+          </button>
+        }
+      </div>
+    </section>
+
+    <!-- כרטיסי ערכות מוכנות -->
+    <section class="presets">
+      <div class="section-header">
+        <h2 class="section-title">התחילו מתבנית</h2>
+        <span class="section-rule"></span>
+      </div>
+      <p class="section-hint">בחרו ערכה ותקבלו רכיבים אופייניים מוכנים לחיפוש</p>
+
+      <div class="presets__grid">
+        @for (preset of presets; track preset.id) {
+          <button class="preset-card"
+                  (click)="loadPreset(preset.items)"
+                  [disabled]="isSearching">
+            <div class="preset-card__icon"><i class="fas" [class]="preset.icon"></i></div>
+            <h3 class="preset-card__title">{{ preset.title }}</h3>
+            <p class="preset-card__subtitle">{{ preset.subtitle }}</p>
+            <div class="preset-card__items">
+              @for (item of preset.items.slice(0, 4); track item) {
+                <span class="preset-card__item">{{ item }}</span>
+              }
+              @if (preset.items.length > 4) {
+                <span class="preset-card__more">+{{ preset.items.length - 4 }}</span>
+              }
+            </div>
+            <span class="preset-card__cta">
+              <i class="fas fa-arrow-left"></i> טען רכיבים
+            </span>
+          </button>
+        }
+      </div>
+    </section>
+  }
+
+  <!-- הרשימה הפעילה של הרכיבים שנבחרו -->
+  @if (ingredients.length > 0) {
+    <section class="my-list">
+      <div class="section-header">
+        <h2 class="section-title">הרכיבים שלי <span class="section-count">{{ ingredients.length }}</span></h2>
+        <span class="section-rule"></span>
+      </div>
+
+      <ul class="chips">
+        @for (ingredient of ingredients; track ingredient; let i = $index) {
+          <li class="chip">
+            <span>{{ ingredient }}</span>
+            <button (click)="removeIngredient(i)" class="chip__remove" aria-label="הסר רכיב">
+              <i class="fas fa-xmark"></i>
+            </button>
+          </li>
+        }
+      </ul>
+
+      <div class="my-list__actions">
+        <button (click)="search()" [disabled]="isSearching" class="btn btn--brand">
+          @if (isSearching) {
+            <span class="spinner-small"></span><span>מחפש...</span>
+          } @else {
+            <i class="fas fa-magnifying-glass"></i><span>חפש מתכונים</span>
+          }
+        </button>
+
+        <button (click)="reset()" [disabled]="isSearching" class="btn btn--ghost">
+          <i class="fas fa-rotate-left"></i><span>נקה הכל</span>
+        </button>
+      </div>
+    </section>
+  }
+
+  <!-- תוצאות החיפוש -->
+  @if (hasSearched) {
+    <section class="results">
+
+      <!-- כותרת התוצאות + סינון פעיל -->
+      <div class="results__head">
+        <div class="results__title-wrap">
+          @if (allSearchResults.length > 0) {
+            @if (selectedType) {
+              <h2 class="results__title">
+                מציג {{ selectedType === 'Meat' ? 'בשרי' : selectedType === 'Dairy' ? 'חלבי' : 'פרווה' }}
+                <span class="results__count">{{ searchResults.length }} מתוך {{ allSearchResults.length }}</span>
+              </h2>
+              <button class="results__clear" (click)="showAllResults()">
+                <i class="fas fa-xmark"></i> בטל סינון
+              </button>
+            } @else {
+              <h2 class="results__title">
+                נמצאו <span class="results__count">{{ allSearchResults.length }}</span> מתכונים מתאימים
+              </h2>
+            }
+          } @else {
+            <h2 class="results__title">לא נמצאו מתכונים</h2>
+          }
+        </div>
+
+        @if (allSearchResults.length > 0) {
+          <p class="results__hint">
+            <i class="fas fa-lightbulb"></i>
+            לחצו על תגית הסוג בכרטיס כדי לסנן, לחיצה נוספת מבטלת
+          </p>
+        }
+      </div>
+
+      <!-- אין תוצאות -->
+      @if (searchResults.length === 0) {
+        <div class="empty">
+          <div class="empty__icon"><i class="fas fa-face-frown"></i></div>
+          <h3 class="empty__title">לא מצאנו מתכון מתאים</h3>
+          <p class="empty__text">נסו להוסיף עוד רכיבים, או להסיר את הסינון.</p>
+        </div>
+      }
+
+      <!-- רשת תוצאות -->
+      @if (searchResults.length > 0) {
+        <ul class="results__grid">
+          @for (result of searchResults; track result.recipe.id) {
+            <li>
+              <article class="result-card" (click)="viewRecipe(result.recipe.id)">
+
+                <!-- תמונה + תווית התאמה -->
+                <div class="result-card__media">
+                  @if (result.recipe.image_path) {
+                    <img [src]="getRecipeImage(result.recipe)" [alt]="result.recipe.title" class="result-card__img">
+                  } @else {
+                    <div class="result-card__placeholder">
+                      <i class="fas fa-utensils"></i>
+                    </div>
+                  }
+                  <span class="result-card__match" [style.background]="getMatchColor(result.match_score)">
+                    <strong>{{ result.match_percentage }}%</strong>
+                    <small>התאמה</small>
+                  </span>
+                </div>
+
+                <!-- גוף הכרטיס -->
+                <div class="result-card__body">
+                  <h3 class="result-card__title">{{ result.recipe.title }}</h3>
+
+                  <div class="result-card__meta">
+                    <span (click)="$event.stopPropagation()">
+                      <app-type-badge [type]="result.recipe.type" (typeClicked)="onTypeClick($event)"></app-type-badge>
+                    </span>
+                    <span class="result-card__time">
+                      <i class="fas fa-clock"></i> {{ result.recipe.preparation_time }} דק'
+                    </span>
+                  </div>
+
+                  <!-- שורת התאמת רכיבים -->
+                  <div class="match-info">
+                    <div class="match-info__row">
+                      <i class="fas fa-check match-info__check"></i>
+                      <span>יש לכם <strong>{{ result.matched_ingredients.length }}</strong> מתוך <strong>{{ result.total_recipe_ingredients }}</strong></span>
+                    </div>
+                    <div class="match-info__bar">
+                      <span [style.width.%]="result.match_percentage" [style.background]="getMatchColor(result.match_score)"></span>
+                    </div>
+                  </div>
+
+                  <!-- רכיבים חסרים -->
+                  @if (result.missing_ingredients.length > 0) {
+                    <div class="missing">
+                      <span class="missing__label">חסרים:</span>
+                      <div class="missing__items">
+                        @for (m of result.missing_ingredients.slice(0, 3); track m) {
+                          <span class="missing__chip">{{ m }}</span>
+                        }
+                        @if (result.missing_ingredients.length > 3) {
+                          <span class="missing__more">+{{ result.missing_ingredients.length - 3 }}</span>
+                        }
+                      </div>
+                    </div>
+                  }
+                </div>
+              </article>
+            </li>
+          }
+        </ul>
+      }
+    </section>
+  }
+
+</div>

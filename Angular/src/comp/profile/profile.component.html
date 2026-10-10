@@ -1,0 +1,207 @@
+<div class="profile">
+
+  <!-- כותרת עליונה -->
+  <header class="page-header">
+    <span class="page-header__eyebrow">החשבון שלי</span>
+    <h1 class="page-header__title">הפרופיל שלי<span class="page-header__dot">.</span></h1>
+  </header>
+
+  <!-- מצב טעינה כללי -->
+  @if (loading) {
+    <div class="state state--loading">
+      <div class="spinner"></div>
+      <p>טוען נתונים...</p>
+    </div>
+  }
+
+  <!-- הודעות עליונות -->
+  @if (errorMessage) {
+    <div class="alert alert--error">
+      <i class="fas fa-circle-exclamation"></i>
+      <span>{{ errorMessage }}</span>
+    </div>
+  }
+
+  @if (successMessage) {
+    <div class="alert alert--success">
+      <i class="fas fa-circle-check"></i>
+      <span>{{ successMessage }}</span>
+    </div>
+  }
+
+  <!-- כרטיס פרופיל ראשי -->
+  @if (currentUser && !loading) {
+
+    <section class="profile-card">
+
+      <!-- אווטאר - אות ראשונה של שם המשתמש -->
+      <div class="profile-card__avatar">
+        <span class="profile-card__initial">
+          {{ currentUser.username.charAt(0).toUpperCase() }}
+        </span>
+      </div>
+
+      <!-- פרטי משתמש -->
+      <div class="profile-card__info">
+
+        <h2 class="profile-card__name">{{ currentUser.username }}</h2>
+
+        <p class="profile-card__email">
+          <i class="fas fa-envelope"></i> {{ currentUser.email }}
+        </p>
+
+        <!-- תגית תפקיד -->
+        <div class="role-badge"
+             [class.admin]="currentUser.role === 'Admin'"
+             [class.uploader]="currentUser.role === 'Uploader'"
+             [class.reader]="currentUser.role === 'Reader'">
+          <span class="role-badge__icon">
+            {{ currentUser.role === 'Admin' ? '👑' :
+               currentUser.role === 'Uploader' ? '📝' : '📖' }}
+          </span>
+          <span>{{ getRoleText(currentUser.role) }}</span>
+        </div>
+
+        <!-- סטטיסטיקות -->
+        <div class="stats">
+          <div class="stat">
+            <span class="stat__num">{{ recipeCount }}</span>
+            <span class="stat__label">מתכונים</span>
+          </div>
+          <div class="stat">
+            <span class="stat__num">{{ formatDate(currentUser.created_at) }}</span>
+            <span class="stat__label">תאריך הצטרפות</span>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ===== בקשת הרשאת העלאה (Reader עם status=none/rejected) ===== -->
+    @if (shouldShowRequestButton()) {
+      <section class="status-card status-card--cta">
+        <div class="status-card__icon"><i class="fas fa-cloud-arrow-up"></i></div>
+        <div class="status-card__body">
+          <h3 class="status-card__title">רוצים להעלות מתכונים משלכם?</h3>
+          <p class="status-card__text">שלחו בקשה למנהל ותקבלו הרשאה לפרסם מתכונים בקהילה.</p>
+        </div>
+        <button class="btn btn--brand" (click)="showRequestModal = true">
+          @if (currentUser.upload_request_status === 'rejected') {
+            <i class="fas fa-rotate-right"></i> <span>שלח בקשה שוב</span>
+          } @else {
+            <i class="fas fa-paper-plane"></i> <span>שלח בקשה</span>
+          }
+        </button>
+      </section>
+    }
+
+    <!-- בקשה ממתינה לאישור -->
+    @if (currentUser.upload_request_status === 'pending') {
+      <section class="status-card status-card--pending">
+        <div class="status-card__icon"><i class="fas fa-hourglass-half"></i></div>
+        <div class="status-card__body">
+          <h3 class="status-card__title">הבקשה שלך נשלחה</h3>
+          <p class="status-card__text">מחכים לאישור מנהל המערכת. נודיע לך ברגע שתאושר.</p>
+        </div>
+      </section>
+    }
+
+    <!-- בקשה שנדחתה -->
+    @if (currentUser.upload_request_status === 'rejected') {
+      <section class="status-card status-card--rejected">
+        <div class="status-card__icon"><i class="fas fa-circle-xmark"></i></div>
+        <div class="status-card__body">
+          <h3 class="status-card__title">הבקשה נדחתה</h3>
+          <p class="status-card__text">מצטערים, המנהל בחר שלא לאשר את הבקשה כרגע. תוכל לנסות לשלוח שוב.</p>
+        </div>
+      </section>
+    }
+
+    <!-- ===== המתכונים שלי (רק למעלי מתכונים מאושרים / Admin) ===== -->
+    @if (currentUser.is_approved_uploader || currentUser.role === 'Admin') {
+      <section class="my-recipes">
+
+        <div class="section-header">
+          <h2 class="section-title">המתכונים שלי</h2>
+          <span class="section-rule"></span>
+        </div>
+
+        <!-- טעינת מתכונים -->
+        @if (loadingRecipes) {
+          <div class="state state--loading">
+            <div class="spinner"></div>
+            <p>טוען מתכונים...</p>
+          </div>
+        } @else {
+
+          <!-- אין מתכונים -->
+          @if (userRecipes.length === 0) {
+            <div class="empty">
+              <div class="empty__icon"><i class="fas fa-utensils"></i></div>
+              <h3 class="empty__title">עדיין לא העלית מתכונים</h3>
+              <p class="empty__text">היה הראשון לחלוק מתכון עם הקהילה</p>
+              <a routerLink="/recipe/add" class="btn btn--brand">
+                <i class="fas fa-plus"></i> הוסף מתכון ראשון
+              </a>
+            </div>
+          } @else {
+
+            <!-- רשת מתכונים -->
+            <ul class="recipes-grid">
+              @for (recipe of userRecipes; track recipe.id) {
+                <li>
+                  <article class="recipe-card" (click)="viewRecipe(recipe.id)">
+                    <div class="recipe-card__media">
+                      <img [src]="getRecipeImage(recipe)" [alt]="recipe.title" loading="lazy" class="recipe-card__img">
+                      <span class="recipe-card__type-badge">
+                        <app-type-badge [type]="recipe.type"></app-type-badge>
+                      </span>
+                    </div>
+                    <div class="recipe-card__body">
+                      <h3 class="recipe-card__title">{{ recipe.title }}</h3>
+                      <div class="recipe-card__meta">
+                        <span><i class="fas fa-clock"></i> {{ recipe.preparation_time }} דק'</span>
+                        <span class="recipe-card__rating">
+                          <i class="fas fa-star"></i>
+                          {{ recipe.average_rating > 0 ? recipe.average_rating.toFixed(1) : 'חדש' }}
+                        </span>
+                      </div>
+                    </div>
+                  </article>
+                </li>
+              }
+            </ul>
+
+          }
+        }
+      </section>
+    }
+  }
+
+  <!-- מודל אישור בקשה -->
+  @if (showRequestModal) {
+    <div class="modal-overlay" (click)="showRequestModal = false">
+      <div class="modal" (click)="$event.stopPropagation()">
+
+        <button class="modal__close" (click)="showRequestModal = false" aria-label="סגירה">
+          <i class="fas fa-xmark"></i>
+        </button>
+
+        <div class="modal__icon"><i class="fas fa-paper-plane"></i></div>
+        <h2 class="modal__title">בקשת הרשאת העלאה</h2>
+        <p class="modal__message">
+          האם לשלוח בקשה למנהל האתר כדי לקבל הרשאה להעלות מתכונים?
+        </p>
+
+        <div class="modal__actions">
+          <button class="btn btn--cancel" (click)="showRequestModal = false">ביטול</button>
+          <button class="btn btn--brand" (click)="confirmRequestPermission()">
+            <i class="fas fa-check"></i> <span>אשר ושלח בקשה</span>
+          </button>
+        </div>
+
+      </div>
+    </div>
+  }
+
+</div>

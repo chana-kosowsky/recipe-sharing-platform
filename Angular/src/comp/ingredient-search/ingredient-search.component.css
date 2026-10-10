@@ -1,0 +1,144 @@
+/* ===== מבנה דף ===== */
+.search-page             { @apply max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12; }
+
+/* ===== כותרת עליונה ===== */
+.page-header             { @apply text-center mb-8 md:mb-10; }
+.page-header__eyebrow    { @apply inline-block text-[11px] sm:text-xs font-bold text-brand-500 uppercase tracking-[0.3em] mb-3; }
+.page-header__title      { @apply text-3xl sm:text-4xl md:text-5xl font-extrabold text-gray-900 tracking-tight leading-none m-0; }
+.page-header__dot        { @apply text-brand-500; }
+.page-header__subtitle   { @apply text-sm sm:text-base text-gray-600 mt-3 m-0 max-w-2xl mx-auto; }
+
+/* ===== כותרת מקטע (משותף) ===== */
+.section-header          { @apply flex items-center gap-3 mb-2 md:mb-3; }
+.section-title           { @apply text-xl sm:text-2xl font-extrabold text-gray-900 tracking-tight whitespace-nowrap m-0 inline-flex items-center gap-2; }
+.section-rule            { @apply flex-1 h-px bg-gray-200; }
+.section-hint            { @apply text-xs sm:text-sm text-gray-500 mb-4 m-0; }
+.section-count           { @apply inline-flex items-center justify-center min-w-[28px] h-6 px-2 bg-brand-500 text-white text-xs font-bold rounded-full; }
+
+/* ===== קופסת הוספת רכיב ===== */
+.add-box                 { @apply mb-8 md:mb-10; }
+.add-box__input-wrap     { @apply relative flex flex-col sm:flex-row gap-2 sm:gap-0 items-stretch bg-white border border-gray-200 sm:rounded-full sm:p-1 shadow-soft transition-all duration-200 rounded-2xl sm:rounded-full; }
+.add-box__input-wrap:focus-within { @apply border-brand-300 ring-2 ring-brand-100; }
+.add-box__icon           { @apply absolute top-1/2 -translate-y-1/2 start-4 sm:start-5 text-gray-400 pointer-events-none; }
+.add-box__input          { @apply flex-1 bg-transparent ps-11 sm:ps-12 pe-4 py-3 sm:py-3.5 text-sm sm:text-base text-gray-800 placeholder:text-gray-400 outline-none border-0 rounded-2xl sm:rounded-full; }
+.add-box__btn            { @apply inline-flex items-center justify-center gap-2 bg-brand-500 text-white text-sm sm:text-base font-bold px-5 sm:px-7 py-3 sm:py-2.5 rounded-2xl sm:rounded-full border-0 cursor-pointer shrink-0 transition-all duration-200; }
+.add-box__btn i          { @apply text-xs; }
+.add-box__btn[disabled]  { @apply opacity-60 cursor-not-allowed; }
+@media (hover: hover) { .add-box__btn:not([disabled]):hover { @apply bg-brand-600 -translate-y-0.5; } }
+
+/* ===== התראות ===== */
+.alert                   { @apply flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold mt-3; }
+.alert i                 { @apply text-base shrink-0; }
+.alert--error            { @apply bg-red-50 border border-red-200 text-red-700; }
+
+/* ===== מקטע הצעות פופולריות ===== */
+.suggestions             { @apply mb-10 md:mb-12; }
+.suggestions__grid       { @apply flex flex-wrap gap-2 sm:gap-2.5; }
+
+.suggestion-chip         { @apply inline-flex items-center gap-1.5 bg-white border border-gray-200 text-gray-700 text-sm font-semibold px-3.5 py-2 rounded-full cursor-pointer transition-all duration-200; }
+.suggestion-chip i       { @apply text-[10px] text-brand-500; }
+.suggestion-chip[disabled] { @apply opacity-60 cursor-not-allowed; }
+@media (hover: hover) { .suggestion-chip:not([disabled]):hover { @apply border-brand-400 -translate-y-0.5 shadow-sm; } }
+.suggestion-chip.added            { @apply bg-brand-500 text-white border-brand-500 shadow-warm; }
+.suggestion-chip.added i          { @apply text-white; }
+
+/* ===== כרטיסי ערכות מוכנות ===== */
+.presets                 { @apply mb-10 md:mb-12; }
+.presets__grid           { @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4; }
+
+.preset-card             { @apply relative bg-white border border-gray-200 rounded-2xl p-5 cursor-pointer text-right transition-all duration-300 flex flex-col gap-3 overflow-hidden; }
+.preset-card::before     { content: ''; @apply absolute inset-x-0 top-0 h-1 bg-gradient-to-l from-brand-500 to-brand-300 opacity-0 transition-opacity duration-300; }
+.preset-card[disabled]   { @apply opacity-60 cursor-not-allowed; }
+@media (hover: hover) { .preset-card:not([disabled]):hover { @apply -translate-y-1 shadow-warm border-brand-200; }
+                        .preset-card:not([disabled]):hover::before { @apply opacity-100; } }
+.preset-card__icon       { @apply w-12 h-12 rounded-xl bg-brand-100 text-brand-500 text-xl inline-flex items-center justify-center; }
+.preset-card__title      { @apply text-lg font-extrabold text-gray-900 m-0; }
+.preset-card__subtitle   { @apply text-xs text-gray-500 m-0 -mt-2; }
+.preset-card__items      { @apply flex flex-wrap gap-1.5 mt-1; }
+.preset-card__item       { @apply text-[11px] font-semibold text-gray-700 bg-cream-100 px-2 py-1 rounded-md; }
+.preset-card__more       { @apply text-[11px] font-bold text-brand-500; }
+.preset-card__cta        { @apply inline-flex items-center gap-1 text-sm font-bold text-brand-500 mt-auto; }
+.preset-card__cta i      { @apply text-xs transition-transform duration-200; }
+@media (hover: hover) { .preset-card:hover .preset-card__cta i { @apply -translate-x-1; } }
+
+/* ===== הרשימה הפעילה ===== */
+.my-list                 { @apply mb-10 md:mb-12; }
+.chips                   { @apply flex flex-wrap gap-2 list-none p-0 m-0 mb-5; }
+.chip                    { @apply inline-flex items-center gap-2 bg-brand-50 border border-brand-200 text-gray-800 text-sm font-bold px-3 py-1.5 rounded-full; }
+.chip__remove            { @apply w-5 h-5 inline-flex items-center justify-center bg-white border-0 text-gray-400 rounded-full cursor-pointer transition-colors duration-200; }
+@media (hover: hover) { .chip__remove:hover { @apply bg-red-500 text-white; } }
+.chip__remove i          { @apply text-[10px]; }
+
+.my-list__actions        { @apply flex flex-col sm:flex-row gap-3; }
+
+/* ===== כפתורים ===== */
+.btn                     { @apply inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full font-bold text-sm sm:text-base border-0 cursor-pointer transition-all duration-200 min-w-[160px]; }
+.btn[disabled]           { @apply opacity-60 cursor-not-allowed; }
+.btn i                   { @apply text-xs; }
+.btn--brand              { @apply bg-brand-500 text-white shadow-warm; }
+@media (hover: hover) { .btn--brand:not([disabled]):hover { @apply bg-brand-600 -translate-y-0.5; } }
+.btn--ghost              { @apply bg-white text-gray-700 border border-gray-200; }
+@media (hover: hover) { .btn--ghost:not([disabled]):hover { @apply bg-gray-50 border-gray-300; } }
+
+/* ===== תוצאות ===== */
+.results                 { @apply mt-2; }
+.results__head           { @apply mb-6; }
+.results__title-wrap     { @apply flex items-center gap-3 flex-wrap; }
+.results__title          { @apply text-xl sm:text-2xl md:text-3xl font-extrabold text-gray-900 tracking-tight m-0 inline-flex items-center gap-2 flex-wrap; }
+.results__count          { @apply text-brand-500; }
+.results__clear          { @apply inline-flex items-center gap-1.5 bg-gray-900 text-white text-xs sm:text-sm font-bold px-3 py-1.5 rounded-full border-0 cursor-pointer transition-colors duration-200; }
+.results__clear i        { @apply text-[10px]; }
+@media (hover: hover) { .results__clear:hover { @apply bg-brand-500; } }
+.results__hint           { @apply text-xs sm:text-sm text-gray-500 mt-3 m-0 inline-flex items-center gap-1.5; }
+.results__hint i         { @apply text-yellow-400; }
+
+/* רשת תוצאות */
+.results__grid           { @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 md:gap-6 list-none p-0 m-0; }
+
+/* כרטיס תוצאה */
+.result-card             { @apply bg-white rounded-2xl overflow-hidden cursor-pointer border border-gray-100 shadow-sm transition-all duration-300 flex flex-col h-full; }
+.result-card:active      { @apply scale-[0.98]; }
+@media (hover: hover) {
+  .result-card:hover     { @apply -translate-y-1 shadow-warm border-brand-200; }
+  .result-card:hover .result-card__img { transform: scale(1.05); }
+}
+
+/* מדיה */
+.result-card__media           { @apply relative aspect-[4/3] overflow-hidden bg-cream-100; }
+.result-card__img             { @apply w-full h-full object-cover transition-transform duration-[600ms]; }
+.result-card__placeholder     { @apply w-full h-full flex items-center justify-center text-5xl text-brand-300; }
+
+/* תווית התאמה - עיגול עם אחוז */
+.result-card__match           { @apply absolute top-3 end-3 inline-flex flex-col items-center justify-center w-16 h-16 rounded-full text-white shadow-warm border-2 border-white; }
+.result-card__match strong    { @apply text-base font-extrabold leading-none; }
+.result-card__match small     { @apply text-[9px] font-bold uppercase tracking-wider mt-0.5; }
+
+/* גוף הכרטיס */
+.result-card__body            { @apply p-4 sm:p-5 flex flex-col gap-3 flex-1; }
+.result-card__title           { @apply text-base sm:text-lg font-extrabold text-gray-900 leading-snug line-clamp-2 m-0; }
+.result-card__meta            { @apply flex items-center gap-3 flex-wrap; }
+.result-card__time            { @apply inline-flex items-center gap-1 text-xs sm:text-sm text-gray-600 font-semibold; }
+.result-card__time i          { @apply text-brand-500 text-[10px]; }
+
+/* מידע התאמת רכיבים */
+.match-info                   { @apply flex flex-col gap-2; }
+.match-info__row              { @apply inline-flex items-center gap-2 text-sm text-gray-700; }
+.match-info__check            { @apply w-5 h-5 rounded-full bg-green-500 text-white text-[10px] inline-flex items-center justify-center; }
+.match-info__bar              { @apply relative w-full h-1.5 bg-gray-100 rounded-full overflow-hidden; }
+.match-info__bar span         { @apply absolute inset-y-0 start-0 rounded-full transition-all duration-500; }
+
+/* רכיבים חסרים */
+.missing                      { @apply flex items-start gap-2 flex-wrap; }
+.missing__label               { @apply text-xs font-bold text-gray-500 uppercase tracking-wider; }
+.missing__items               { @apply flex flex-wrap gap-1.5; }
+.missing__chip                { @apply text-[11px] font-semibold text-red-700 bg-red-50 border border-red-200 px-2 py-0.5 rounded-md; }
+.missing__more                { @apply text-[11px] font-bold text-gray-500; }
+
+/* ===== מצב ריק / טעינה ===== */
+.empty                        { @apply flex flex-col items-center justify-center text-center bg-cream-50 border border-cream-200 rounded-2xl py-12 md:py-16 px-6; }
+.empty__icon                  { @apply w-20 h-20 rounded-full bg-cream-100 text-brand-500 text-3xl inline-flex items-center justify-center mb-4; }
+.empty__title                 { @apply text-xl sm:text-2xl font-extrabold text-gray-900 m-0 mb-2; }
+.empty__text                  { @apply text-sm sm:text-base text-gray-600 m-0; }
+
+/* ספינר קטן בכפתור */
+.spinner-small                { @apply w-4 h-4 border-2 border-white/40 border-t-white rounded-full animate-spin inline-block; }

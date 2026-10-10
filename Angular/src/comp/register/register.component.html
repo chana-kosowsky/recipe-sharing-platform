@@ -1,0 +1,156 @@
+<div class="auth">
+
+  <!-- פאנל מותג (דסקטופ) -->
+  <aside class="auth__brand">
+    <div class="auth__brand-overlay"></div>
+    <div class="auth__brand-content">
+      <a routerLink="/" class="auth__logo">TASTE<span>.</span></a>
+      <p class="auth__tagline">הצטרפו לקהילה של אוהבי בישול וגלו השראה חדשה בכל יום.</p>
+      <span class="auth__bottom-line">חברו אלינו · פרסמו · בשלו</span>
+    </div>
+  </aside>
+
+  <!-- טופס -->
+  <main class="auth__form-wrap">
+    <div class="auth__form-card">
+
+      <a routerLink="/" class="auth__mobile-logo">TASTE<span>.</span></a>
+
+      <header class="auth__header">
+        <span class="auth__eyebrow">חברים חדשים</span>
+        <h1 class="auth__title">הצטרפו לקהילה</h1>
+        <p class="auth__subtitle">פתחו חשבון חינם ושתפו את המתכונים שלכם.</p>
+      </header>
+
+      <form (ngSubmit)="register()" #registerForm="ngForm" class="auth__form" novalidate>
+
+        <!-- שם משתמש -->
+        <div class="field">
+          <label for="username" class="field__label">שם משתמש</label>
+          <input
+            type="text"
+            id="username"
+            name="username"
+            [(ngModel)]="newUser.username"
+            required
+            minlength="3"
+            pattern="[a-zA-Zא-ת ]+"
+            placeholder="לדוגמה: דניאל כהן"
+            #usernameInput="ngModel"
+            class="field__input"
+            [class.input-invalid]="usernameInput.invalid && usernameInput.touched"
+            [class.input-valid]="usernameInput.valid && usernameInput.touched">
+
+          @if (usernameInput.invalid && (usernameInput.dirty || usernameInput.touched)) {
+            <div class="field__error">
+              @if (usernameInput.errors!['required']) { <span>שם משתמש הוא שדה חובה</span> }
+              @if (usernameInput.errors!['minlength']) { <span>חייב להכיל לפחות 3 תווים</span> }
+              @if (usernameInput.errors!['pattern']) { <span>רק אותיות מותרות (עברית או אנגלית)</span> }
+            </div>
+          }
+        </div>
+
+        <!-- אימייל -->
+        <div class="field">
+          <label for="email" class="field__label">אימייל</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            [(ngModel)]="newUser.email"
+            required
+            email
+            placeholder="your@email.com"
+            #emailInput="ngModel"
+            class="field__input"
+            [class.input-invalid]="emailInput.invalid && emailInput.touched"
+            [class.input-valid]="emailInput.valid && emailInput.touched">
+
+          @if (emailInput.invalid && (emailInput.dirty || emailInput.touched)) {
+            <div class="field__error">
+              @if (emailInput.errors!['required']) { <span>אימייל הוא שדה חובה</span> }
+              @if (emailInput.errors!['email']) { <span>כתובת אימייל לא תקינה</span> }
+            </div>
+          }
+        </div>
+
+        <!-- סיסמה -->
+        <div class="field">
+          <label for="password" class="field__label">סיסמה</label>
+          <div class="password-wrap">
+            <input
+              [type]="showPassword ? 'text' : 'password'"
+              id="password"
+              name="password"
+              [(ngModel)]="newUser.password"
+              required
+              minlength="6"
+              placeholder="לפחות 6 תווים"
+              #passwordInput="ngModel"
+              class="field__input"
+              [class.input-invalid]="passwordInput.invalid && passwordInput.touched"
+              [class.input-valid]="passwordInput.valid && passwordInput.touched">
+
+            <button type="button" class="password-toggle" (click)="togglePassword()" aria-label="הצג/הסתר סיסמה">
+              <i [class]="showPassword ? 'fa fa-eye-slash' : 'fa fa-eye'"></i>
+            </button>
+          </div>
+
+          @if (passwordInput.invalid && (passwordInput.dirty || passwordInput.touched)) {
+            <div class="field__error">
+              @if (passwordInput.errors!['required']) { <span>סיסמה היא שדה חובה</span> }
+              @if (passwordInput.errors!['minlength']) { <span>הסיסמה חייבת להכיל לפחות 6 תווים</span> }
+            </div>
+          }
+
+          <!-- מד חוזק סיסמה -->
+          @if (passwordInput.value && passwordInput.value.length > 0) {
+            <div class="strength">
+              <div class="strength__bar"
+                   [class.weak]="passwordInput.value.length < 6"
+                   [class.medium]="passwordInput.value.length >= 6 && passwordInput.value.length < 10"
+                   [class.strong]="passwordInput.value.length >= 10">
+              </div>
+              <span class="strength__text"
+                    [class.weak]="passwordInput.value.length < 6"
+                    [class.medium]="passwordInput.value.length >= 6 && passwordInput.value.length < 10"
+                    [class.strong]="passwordInput.value.length >= 10">
+                @if (passwordInput.value.length < 6) { <i class="fas fa-shield-halved"></i> חלשה }
+                @if (passwordInput.value.length >= 6 && passwordInput.value.length < 10) { <i class="fas fa-shield-halved"></i> בינונית }
+                @if (passwordInput.value.length >= 10) { <i class="fas fa-shield-halved"></i> חזקה }
+              </span>
+            </div>
+          }
+        </div>
+
+        <!-- כפתור הרשמה -->
+        <button type="submit" class="btn btn--submit" [disabled]="registerForm.invalid">
+          <i class="fas fa-user-plus"></i><span>הרשם עכשיו</span>
+        </button>
+
+      </form>
+
+      <!-- הודעות מהשרת -->
+      @if (errorMessage) {
+        <div class="alert alert--error">
+          <i class="fas fa-circle-exclamation"></i>
+          <span>{{ errorMessage }}</span>
+        </div>
+      }
+      @if (successMessage) {
+        <div class="alert alert--success">
+          <i class="fas fa-circle-check"></i>
+          <span>{{ successMessage }}</span>
+        </div>
+        <a routerLink="/home"></a>
+      }
+
+      <p class="auth__switch">
+        כבר יש לכם חשבון?
+        <a routerLink="/login">התחברו כאן <i class="fas fa-arrow-left"></i></a>
+      </p>
+
+    </div>
+  </main>
+
+</div>

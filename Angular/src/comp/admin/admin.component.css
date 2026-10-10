@@ -1,0 +1,106 @@
+/* ===== מבנה ===== */
+.admin                   { @apply max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12; }
+
+/* ===== כותרת עליונה ===== */
+.page-header             { @apply text-center mb-8 md:mb-10; }
+.page-header__eyebrow    { @apply inline-block text-[11px] sm:text-xs font-bold text-brand-500 uppercase tracking-[0.3em] mb-3; }
+.page-header__title      { @apply text-3xl sm:text-4xl md:text-5xl font-extrabold text-gray-900 tracking-tight leading-none m-0; }
+.page-header__dot        { @apply text-brand-500; }
+.page-header__subtitle   { @apply text-sm sm:text-base text-gray-600 mt-3 m-0; }
+
+/* ===== התראות ===== */
+.alert                   { @apply flex items-center gap-3 px-5 py-3.5 rounded-xl text-sm sm:text-base font-semibold mb-5; }
+.alert i                 { @apply text-xl shrink-0; }
+.alert--success          { @apply bg-green-50 border border-green-200 text-green-700; }
+.alert--error            { @apply bg-red-50 border border-red-200 text-red-700; }
+
+/* ===== כרטיס סטטיסטיקה - מציג מספר בקשות ===== */
+.stat-bar                { @apply relative flex items-center gap-4 bg-gradient-to-l from-cream-50 to-white border border-cream-200 rounded-2xl p-5 sm:p-6 mb-8 shadow-soft overflow-hidden; }
+.stat-bar::before        { content: ''; @apply absolute inset-y-0 start-0 w-1.5 bg-brand-500; }
+.stat-bar__icon          { @apply w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-brand-500 text-white text-2xl sm:text-3xl inline-flex items-center justify-center shrink-0 shadow-warm; }
+.stat-bar__content       { @apply flex-1 flex flex-col; }
+.stat-bar__label         { @apply text-[11px] sm:text-xs font-bold text-gray-500 uppercase tracking-wider; }
+.stat-bar__count         { @apply text-3xl sm:text-4xl font-extrabold text-gray-900 leading-none mt-1; }
+.stat-bar__hint          { @apply hidden sm:inline text-sm text-gray-500 font-medium; }
+
+/* ===== כותרת מקטע ===== */
+.section-header          { @apply flex items-center gap-3 mb-4 md:mb-5; }
+.section-title           { @apply text-xl sm:text-2xl font-extrabold text-gray-900 tracking-tight whitespace-nowrap m-0; }
+.section-rule            { @apply flex-1 h-px bg-gray-200; }
+
+/* ===== כרטיסי משתמשים ===== */
+.users                   { @apply list-none p-0 m-0 flex flex-col gap-3 sm:gap-4; }
+
+.user-row                { @apply bg-white border border-gray-100 rounded-2xl shadow-soft p-4 sm:p-5 flex flex-col md:flex-row md:items-center gap-4 md:gap-6 transition-all duration-200; }
+@media (hover: hover) { .user-row:hover { @apply border-brand-200 shadow-warm; } }
+
+/* זהות - אווטאר + שם + אימייל */
+.user-row__identity      { @apply flex items-center gap-3 sm:gap-4 flex-1 min-w-0; }
+.user-row__avatar        { @apply w-12 h-12 sm:w-14 sm:h-14 rounded-full inline-flex items-center justify-center text-white text-lg sm:text-xl font-extrabold shadow-warm select-none shrink-0;
+                           background-image: linear-gradient(135deg, theme('colors.brand.400'), theme('colors.brand.600')); }
+.user-row__info          { @apply flex flex-col min-w-0; }
+.user-row__name          { @apply text-base sm:text-lg font-extrabold text-gray-900 m-0 truncate; }
+.user-row__email         { @apply text-xs sm:text-sm text-gray-500 m-0 truncate; }
+.user-row__email i       { @apply text-brand-500 text-[10px] me-1; }
+
+/* מטא - תפקיד ומזהה */
+.user-row__meta          { @apply flex items-center gap-3 flex-wrap; }
+.user-row__role          { @apply inline-flex items-center gap-1.5 bg-gray-100 text-gray-700 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider; }
+.user-row__role i        { @apply text-[10px] text-gray-500; }
+.user-row__id            { @apply text-xs font-mono text-gray-400; }
+
+/* כפתורי פעולה */
+.user-row__actions       { @apply flex items-center gap-2 sm:gap-3 md:shrink-0; }
+
+/* ===== כפתורים ===== */
+.btn                     { @apply inline-flex items-center justify-center gap-1.5 px-4 sm:px-5 py-2 sm:py-2.5 rounded-full font-bold text-xs sm:text-sm border-0 cursor-pointer transition-all duration-200; }
+.btn i                   { @apply text-[10px]; }
+.btn[disabled]           { @apply opacity-60 cursor-not-allowed; }
+
+/* כפתור אישור - ירוק עדין */
+.btn--approve            { @apply bg-green-50 text-green-700 border border-green-200; }
+@media (hover: hover) { .btn--approve:hover { @apply bg-green-600 text-white border-green-600 -translate-y-0.5 shadow-warm; } }
+
+/* כפתור דחייה - אדום עדין */
+.btn--reject             { @apply bg-red-50 text-red-700 border border-red-200; }
+@media (hover: hover) { .btn--reject:hover { @apply bg-red-600 text-white border-red-600 -translate-y-0.5; } }
+
+/* גרסאות "סולידיות" למודל */
+.btn--approve-solid      { @apply bg-green-600 text-white shadow-warm; min-width: 130px; }
+@media (hover: hover) { .btn--approve-solid:hover { @apply bg-green-700 -translate-y-0.5; } }
+
+.btn--reject-solid       { @apply bg-red-600 text-white shadow-warm; min-width: 130px; }
+@media (hover: hover) { .btn--reject-solid:hover { @apply bg-red-700 -translate-y-0.5; } }
+
+.btn--cancel             { @apply bg-gray-100 text-gray-700; min-width: 100px; }
+@media (hover: hover) { .btn--cancel:hover { @apply bg-gray-200; } }
+
+/* ===== מצב ריק / טעינה ===== */
+.state                   { @apply flex flex-col items-center justify-center text-center py-12 md:py-16 px-4; }
+.state p                 { @apply text-base text-gray-600 m-0; }
+.state--loading          { @apply text-brand-500; }
+.spinner                 { @apply w-12 h-12 border-4 border-brand-100 border-t-brand-500 rounded-full animate-spin mb-4; }
+
+.empty                   { @apply flex flex-col items-center justify-center text-center bg-cream-50 border border-cream-200 rounded-2xl py-12 md:py-16 px-6; }
+.empty__icon             { @apply w-20 h-20 rounded-full bg-cream-100 text-brand-500 text-3xl inline-flex items-center justify-center mb-4; }
+.empty__title            { @apply text-xl sm:text-2xl font-extrabold text-gray-900 m-0 mb-2; }
+.empty__text             { @apply text-sm sm:text-base text-gray-600 m-0; }
+
+/* ===== מודל אישור/דחייה ===== */
+.modal-overlay           { @apply fixed inset-0 z-50 bg-black/60 backdrop-blur flex items-center justify-center p-4;
+                           animation: fadeIn 0.2s ease-out; }
+.modal                   { @apply relative bg-white rounded-2xl w-full max-w-md p-6 sm:p-8 shadow-2xl text-center;
+                           animation: scaleIn 0.25s ease-out; }
+.modal__close            { @apply absolute top-3 end-3 w-9 h-9 rounded-full bg-gray-100 text-gray-600 border-0 cursor-pointer flex items-center justify-center transition-colors duration-200; }
+@media (hover: hover) { .modal__close:hover { @apply bg-gray-900 text-white; } }
+.modal__icon             { @apply w-16 h-16 mx-auto rounded-full text-3xl inline-flex items-center justify-center mb-4; }
+.modal__icon--approve    { @apply bg-green-100 text-green-600; }
+.modal__icon--reject     { @apply bg-red-100 text-red-600; }
+.modal__title            { @apply text-2xl font-extrabold text-gray-900 m-0 mb-3; }
+.modal__message          { @apply text-gray-600 text-sm sm:text-base leading-relaxed m-0 mb-6; }
+.modal__message strong   { @apply text-gray-900 font-bold; }
+.modal__note             { @apply inline-block text-xs sm:text-sm text-gray-500 mt-2; }
+.modal__actions          { @apply flex gap-3 justify-center flex-wrap; }
+
+@keyframes fadeIn  { from { opacity: 0; } to { opacity: 1; } }
+@keyframes scaleIn { from { opacity: 0; transform: scale(0.92); } to { opacity: 1; transform: scale(1); } }

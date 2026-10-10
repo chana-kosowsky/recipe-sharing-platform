@@ -1,0 +1,186 @@
+<!-- כפתור צף - תמיד נראה -->
+<button class="chef-fab" (click)="toggle()" [class.chef-fab--open]="isOpen()" aria-label="פתח/סגור שף AI">
+  @if (isOpen()) {
+    <i class="fas fa-xmark"></i>
+  } @else {
+    <i class="fas fa-utensils"></i>
+    <span class="chef-fab__label">שף AI</span>
+  }
+</button>
+
+<!-- רקע כהה מאחורי המגירה (לחיצה סוגרת) -->
+@if (isOpen()) {
+  <div class="chef-backdrop" (click)="close()"></div>
+}
+
+<!-- מגירת הפאנל -->
+<aside class="chef-panel" [class.chef-panel--open]="isOpen()" aria-label="שף AI">
+
+  <!-- כותרת -->
+  <header class="chef-panel__head">
+    <div class="chef-panel__head-icon"><i class="fas fa-utensils"></i></div>
+    <div class="chef-panel__head-text">
+      <h2 class="chef-panel__title">שף AI</h2>
+      <p class="chef-panel__subtitle">עוזר/ת הבישול האישי/ת שלכם</p>
+    </div>
+    <button class="chef-panel__close" (click)="close()" aria-label="סגור">
+      <i class="fas fa-xmark"></i>
+    </button>
+  </header>
+
+  <!-- תוכן -->
+  <div class="chef-panel__body">
+
+    <!-- כפתורי התאמה מהירה -->
+    <section class="chef-actions">
+      <h3 class="chef-actions__title">
+        <i class="fas fa-wand-magic-sparkles"></i> התאמות מהירות
+      </h3>
+      <p class="chef-actions__hint">לחיצה אחת להמיר את המתכון</p>
+      <div class="chef-actions__grid">
+        @for (btn of adaptButtons; track btn.key) {
+          <button
+            class="adapt-btn"
+            (click)="requestAdaptation(btn.key)"
+            [disabled]="adaptingType() !== null"
+            [class.adapt-btn--loading]="adaptingType() === btn.key">
+            @if (adaptingType() === btn.key) {
+              <span class="spinner-small"></span>
+            } @else {
+              <i class="fas" [class]="btn.icon"></i>
+            }
+            <span>{{ btn.label }}</span>
+          </button>
+        }
+      </div>
+    </section>
+
+    <!-- שגיאה כללית -->
+    @if (errorMessage()) {
+      <div class="chef-error">
+        <i class="fas fa-circle-exclamation"></i>
+        <span>{{ errorMessage() }}</span>
+      </div>
+    }
+
+    <!-- תוצאת ההתאמה -->
+    @if (adaptedResult(); as result) {
+      <section class="adapted">
+        <header class="adapted__head">
+          <span class="adapted__badge">{{ result.label }}</span>
+          <button class="adapted__close" (click)="closeAdapted()" aria-label="סגור">
+            <i class="fas fa-xmark"></i>
+          </button>
+        </header>
+
+        <h3 class="adapted__title">{{ result.recipe.title }}</h3>
+        <p class="adapted__summary">
+          <i class="fas fa-circle-info"></i>
+          {{ result.recipe.summary_of_changes }}
+        </p>
+
+        <div class="adapted__meta">
+          <i class="fas fa-clock"></i> {{ result.recipe.preparation_time }} דקות
+        </div>
+
+        <div class="adapted__section">
+          <h4>רכיבים</h4>
+          <ul class="adapted__ingredients">
+            @for (ing of result.recipe.ingredients; track $index) {
+              <li>
+                <i class="fas fa-check"></i>
+                <strong>{{ ing.amount }} {{ ing.unit }}</strong>
+                <span>{{ ing.product }}</span>
+              </li>
+            }
+          </ul>
+        </div>
+
+        <div class="adapted__section">
+          <h4>הוראות הכנה</h4>
+          <ol class="adapted__steps">
+            @for (step of splitInstructions(result.recipe.instructions); track $index) {
+              <li>{{ step }}</li>
+            }
+          </ol>
+        </div>
+      </section>
+    }
+
+    <!-- צ'אט -->
+    <section class="chef-chat">
+      <div class="chef-chat__head">
+        <h3 class="chef-chat__title">
+          <i class="fas fa-comments"></i> שאלות לשף
+        </h3>
+        @if (messages().length > 0) {
+          <button class="chef-chat__clear" (click)="clearChat()">
+            <i class="fas fa-rotate-left"></i> נקה
+          </button>
+        }
+      </div>
+
+      <!-- היסטוריית הודעות -->
+      <div class="chef-panel__messages">
+        @if (messages().length === 0 && !isThinking()) {
+          <div class="chef-empty">
+            <i class="fas fa-comment-dots"></i>
+            <p>שאלו אותי מה שאתם רוצים על המתכון</p>
+            <div class="chef-empty__suggestions">
+              <button class="chef-empty__suggestion" (click)="draft = 'במה אפשר להחליף ביצים?'; sendMessage()">
+                במה להחליף ביצים?
+              </button>
+              <button class="chef-empty__suggestion" (click)="draft = 'איך אדע שהמנה מוכנה?'; sendMessage()">
+                איך אדע שזה מוכן?
+              </button>
+              <button class="chef-empty__suggestion" (click)="draft = 'איך לשמור את זה?'; sendMessage()">
+                איך לשמור את זה?
+              </button>
+            </div>
+          </div>
+        }
+
+        @for (msg of messages(); track $index) {
+          <div class="msg" [class.msg--user]="msg.role === 'user'" [class.msg--model]="msg.role === 'model'">
+            <div class="msg__avatar">
+              @if (msg.role === 'user') {
+                <i class="fas fa-user"></i>
+              } @else {
+                <i class="fas fa-utensils"></i>
+              }
+            </div>
+            <div class="msg__bubble">{{ msg.text }}</div>
+          </div>
+        }
+
+        @if (isThinking()) {
+          <div class="msg msg--model">
+            <div class="msg__avatar"><i class="fas fa-utensils"></i></div>
+            <div class="msg__bubble msg__bubble--thinking">
+              <span></span><span></span><span></span>
+            </div>
+          </div>
+        }
+      </div>
+
+      <!-- שורת קלט -->
+      <form class="chef-input" (ngSubmit)="sendMessage()">
+        <input
+          type="text"
+          [(ngModel)]="draft"
+          name="draft"
+          placeholder="שאל שאלה על המתכון..."
+          [disabled]="isThinking()"
+          autocomplete="off">
+        <button
+          type="submit"
+          class="chef-input__send"
+          [disabled]="!draft.trim() || isThinking()"
+          aria-label="שלח">
+          <i class="fas fa-paper-plane"></i>
+        </button>
+      </form>
+    </section>
+
+  </div>
+</aside>

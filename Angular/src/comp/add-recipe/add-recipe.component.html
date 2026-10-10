@@ -1,0 +1,325 @@
+<div class="add-recipe">
+
+  <!-- כותרת עליונה - באנר עריכתי -->
+  <header class="page-header">
+    <span class="page-header__eyebrow">הוספת מתכון חדש</span>
+    <h1 class="page-header__title">שתפו את המתכון שלכם<span class="page-header__dot">.</span></h1>
+    <p class="page-header__subtitle">בקהילה שלנו, כל מתכון הוא סיפור. בואו נספר את שלכם.</p>
+  </header>
+
+  <!-- הודעות עליונות -->
+  @if (successMessage) {
+    <div class="alert alert--success">
+      <i class="fas fa-circle-check"></i>
+      <span>{{ successMessage }}</span>
+    </div>
+  }
+
+  @if (errorMessage) {
+    <div class="alert alert--error">
+      <i class="fas fa-circle-exclamation"></i>
+      <span>{{ errorMessage }}</span>
+    </div>
+  }
+
+  <!-- הטופס -->
+  <form [formGroup]="recipeForm" (ngSubmit)="submitRecipe()" class="form">
+
+    <!-- =========== שלב 1: פרטים בסיסיים =========== -->
+    <section class="form-card">
+      <header class="form-card__head">
+        <span class="form-card__step">01</span>
+        <div>
+          <h2 class="form-card__title">פרטים בסיסיים</h2>
+          <p class="form-card__hint">המידע שיוצג ברשימת המתכונים ובכרטיס המתכון</p>
+        </div>
+      </header>
+
+      <div class="form-card__body">
+
+        <!-- שם המתכון -->
+        <div class="field">
+          <label for="title" class="field__label">
+            שם המתכון <span class="field__req">*</span>
+          </label>
+          <input
+            type="text"
+            id="title"
+            formControlName="title"
+            placeholder="לדוגמה: עוגת שוקולד עשירה"
+            class="field__input"
+            [class.invalid]="title.invalid && title.touched"
+            [class.valid]="title.valid && title.touched">
+
+          @if (title.invalid && title.touched) {
+            <div class="field__error">
+              @if (title.hasError('required')) { <span>שם המתכון הוא שדה חובה</span> }
+              @if (title.hasError('minlength')) { <span>שם המתכון חייב להכיל לפחות 3 תווים</span> }
+            </div>
+          }
+        </div>
+
+        <!-- שלוש עמודות: זמן הכנה / סוג / קטגוריה -->
+        <div class="field-grid field-grid--three">
+
+          <!-- זמן הכנה -->
+          <div class="field">
+            <label for="preparation_time" class="field__label">
+              זמן הכנה (דקות) <span class="field__req">*</span>
+            </label>
+            <input
+              type="number"
+              id="preparation_time"
+              formControlName="preparation_time"
+              placeholder="45"
+              min="1"
+              class="field__input"
+              [class.invalid]="preparation_time.invalid && preparation_time.touched"
+              [class.valid]="preparation_time.valid && preparation_time.touched">
+
+            @if (preparation_time.invalid && preparation_time.touched) {
+              <div class="field__error">
+                @if (preparation_time.hasError('required')) { <span>זמן הכנה הוא שדה חובה</span> }
+                @if (preparation_time.hasError('min')) { <span>הזמן חייב להיות לפחות דקה אחת</span> }
+              </div>
+            }
+          </div>
+
+          <!-- סוג מתכון -->
+          <div class="field">
+            <label for="type" class="field__label">
+              סוג המתכון <span class="field__req">*</span>
+            </label>
+            <select
+              id="type"
+              formControlName="type"
+              class="field__input field__input--select"
+              [class.invalid]="type.invalid && type.touched"
+              [class.valid]="type.valid && type.touched">
+              <option value="">בחר סוג...</option>
+              <option value="Dairy">🥛 חלבי</option>
+              <option value="Meat">🥩 בשרי</option>
+              <option value="Parve">🌿 פרווה</option>
+            </select>
+
+            @if (type.invalid && type.touched) {
+              <div class="field__error"><span>יש לבחור סוג מתכון</span></div>
+            }
+          </div>
+
+          <!-- קטגוריה -->
+          <div class="field">
+            <label for="category" class="field__label">
+              קטגוריה <span class="field__req">*</span>
+            </label>
+            <select
+              id="category"
+              formControlName="category"
+              class="field__input field__input--select"
+              [class.invalid]="category.invalid && category.touched"
+              [class.valid]="category.valid && category.touched">
+              <option value="">בחר קטגוריה...</option>
+              @for (cat of recipeCategories; track cat.value) {
+                <option [value]="cat.value">{{ cat.emoji }} {{ cat.label }}</option>
+              }
+            </select>
+
+            @if (category.invalid && category.touched) {
+              <div class="field__error"><span>יש לבחור קטגוריה</span></div>
+            }
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- =========== שלב 2: תמונה =========== -->
+    <section class="form-card">
+      <header class="form-card__head">
+        <span class="form-card__step">02</span>
+        <div>
+          <h2 class="form-card__title">תמונת המתכון</h2>
+          <p class="form-card__hint">תמונה איכותית מושכת יותר עיניים. אופציונלי אבל מאוד מומלץ</p>
+        </div>
+      </header>
+
+      <div class="form-card__body">
+        <div
+          class="upload"
+          (click)="fileInput.click()"
+          (dragover)="onDragOver($event)"
+          (dragleave)="onDragLeave($event)"
+          (drop)="onDrop($event)"
+          [class.dragover]="isDragOver"
+          [class.has-preview]="imagePreview">
+
+          <input
+            type="file"
+            id="image"
+            accept="image/jpeg,image/jpg,image/png,image/webp"
+            (change)="onImageSelected($event)"
+            #fileInput
+            hidden>
+
+          <!-- מסך פתיחה - בלי תצוגה מקדימה -->
+          @if (!imagePreview) {
+            <div class="upload__placeholder">
+              <div class="upload__icon"><i class="fas fa-cloud-arrow-up"></i></div>
+              <strong>גררו תמונה לכאן או לחצו לבחירה</strong>
+              <small>JPG · PNG · WEBP · עד 5MB</small>
+            </div>
+          }
+
+          <!-- תצוגה מקדימה -->
+          @if (imagePreview) {
+            <div class="upload__preview">
+              <img [src]="imagePreview" alt="תצוגה מקדימה">
+              <button type="button" class="upload__remove" (click)="removeImage(); $event.stopPropagation()">
+                <i class="fas fa-xmark"></i> הסר תמונה
+              </button>
+            </div>
+          }
+        </div>
+      </div>
+    </section>
+
+    <!-- =========== שלב 3: רכיבים =========== -->
+    <section class="form-card">
+      <header class="form-card__head">
+        <span class="form-card__step">03</span>
+        <div>
+          <h2 class="form-card__title">רכיבים</h2>
+          <p class="form-card__hint">הוסיפו את כל הרכיבים הדרושים למתכון</p>
+        </div>
+      </header>
+
+      <div class="form-card__body">
+        <ul class="ingredients" formArrayName="ingredients">
+          @for (ingredient of ingredients.controls; track $index) {
+            <li class="ingredients__row" [formGroupName]="$index">
+
+              <!-- שם הרכיב -->
+              <div class="ingredients__cell ingredients__cell--product">
+                <input
+                  type="text"
+                  formControlName="product"
+                  placeholder="קמח"
+                  class="field__input">
+              </div>
+
+              <!-- כמות -->
+              <div class="ingredients__cell ingredients__cell--amount">
+                <input
+                  type="number"
+                  formControlName="amount"
+                  placeholder="2"
+                  min="0"
+                  step="0.1"
+                  class="field__input">
+              </div>
+
+              <!-- יחידה -->
+              <div class="ingredients__cell ingredients__cell--unit">
+                <select formControlName="unit" class="field__input field__input--select">
+                  <option value="" disabled selected hidden>יחידה...</option>
+                  <option value="כוסות">כוסות</option>
+                  <option value="כפות">כפות</option>
+                  <option value="כפיות">כפיות</option>
+                  <option value="גרם">גרם</option>
+                  <option value="קילו">קילו</option>
+                  <option value="יחידות">יחידות</option>
+                  <option value="מ״ל">מ״ל</option>
+                  <option value="ליטר">ליטר</option>
+                  <option value="אחר">אחר</option>
+                </select>
+              </div>
+
+              <!-- יחידה מותאמת אישית (רק כש"אחר") -->
+              @if (ingredient.get('unit')?.value === 'אחר') {
+                <div class="ingredients__cell ingredients__cell--custom">
+                  <input
+                    type="text"
+                    formControlName="customUnit"
+                    placeholder="הכנס יחידה אחרת"
+                    class="field__input"
+                    [class.invalid]="ingredient.get('customUnit')?.invalid && ingredient.get('customUnit')?.touched">
+                </div>
+              }
+
+              <!-- כפתור מחיקה -->
+              <button
+                type="button"
+                class="ingredients__remove"
+                (click)="removeIngredient($index)"
+                [disabled]="ingredients.length === 1"
+                aria-label="מחק רכיב">
+                <i class="fas fa-trash"></i>
+              </button>
+            </li>
+          }
+        </ul>
+
+        <button type="button" class="btn-add" (click)="addIngredient()">
+          <i class="fas fa-plus"></i> הוסף רכיב נוסף
+        </button>
+      </div>
+    </section>
+
+    <!-- =========== שלב 4: הוראות =========== -->
+    <section class="form-card">
+      <header class="form-card__head">
+        <span class="form-card__step">04</span>
+        <div>
+          <h2 class="form-card__title">הוראות הכנה</h2>
+          <p class="form-card__hint">כתבו שלב אחר שלב. החליפו שורות בין הסעיפים לפיצול אוטומטי</p>
+        </div>
+      </header>
+
+      <div class="form-card__body">
+        <div class="field">
+          <label for="instructions" class="field__label">
+            תיאור ההכנה <span class="field__req">*</span>
+          </label>
+          <textarea
+            id="instructions"
+            formControlName="instructions"
+            rows="10"
+            placeholder="רשום את שלבי ההכנה בצורה מפורטת...&#10;&#10;לדוגמה:&#10;1. מערבבים את הביצים עם הסוכר&#10;2. מוסיפים קמח ואבקת אפייה&#10;3. אופים 40 דקות ב-180 מעלות"
+            class="field__input field__input--area"
+            [class.invalid]="instructions.invalid && instructions.touched"
+            [class.valid]="instructions.valid && instructions.touched"></textarea>
+
+          @if (instructions.invalid && instructions.touched) {
+            <div class="field__error">
+              @if (instructions.hasError('required')) { <span>הוראות הכנה הן שדה חובה</span> }
+              @if (instructions.hasError('minlength')) { <span>ההוראות חייבות להכיל לפחות 20 תווים</span> }
+            </div>
+          }
+        </div>
+      </div>
+    </section>
+
+    <!-- =========== שורת פעולה תחתונה =========== -->
+    <div class="form-actions">
+      <button
+        type="button"
+        class="btn btn--cancel"
+        (click)="cancel()"
+        [disabled]="isLoading">
+        ביטול
+      </button>
+
+      <button
+        type="submit"
+        class="btn btn--submit"
+        [disabled]="recipeForm.invalid || isLoading">
+        @if (isLoading) {
+          <span class="spinner-small"></span><span>שומר...</span>
+        } @else {
+          <i class="fas fa-paper-plane"></i><span>פרסם מתכון</span>
+        }
+      </button>
+    </div>
+
+  </form>
+</div>

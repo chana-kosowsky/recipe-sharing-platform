@@ -1,0 +1,102 @@
+<!-- מסך טעינה -->
+@if (isLoading) {
+  <div class="loader">
+    <div class="spinner"></div>
+    <p>מכינים לכם משהו טעים...</p>
+  </div>
+} @else {
+  <div class="home">
+
+    <!-- אזור Hero - באנר מותג קומפקטי -->
+    <header class="hero">
+      <img class="hero__bg" src="hero.png" alt="">
+      <div class="hero__inner">
+        <span class="hero__eyebrow">ברוכים הבאים אל</span>
+        <h1 class="hero__title">TASTE</h1>
+        <p class="hero__slogan">סיפור של אוכל וטעם</p>
+      </div>
+    </header>
+
+    <div class="container">
+
+      <!-- רשת קטגוריות -->
+      <section class="section">
+        <div class="section-header">
+          <h2 class="section-title">קטגוריות</h2>
+          <span class="section-rule"></span>
+        </div>
+        <div class="category-grid">
+          @for (cat of recipeData.recipeCategories; track cat.value) {
+            <button class="category-tile" (click)="filterByCategory(cat.value)" [style.--cat-color]="cat.color">
+              <span class="category-tile__label">{{ cat.label }}</span>
+              <span class="category-tile__arrow" aria-hidden="true"><i class="fas fa-arrow-left"></i></span>
+            </button>
+          }
+        </div>
+      </section>
+
+      <!-- מתכון השבוע - כרטיס מגזין -->
+      @if (recipeOfTheWeek) {
+        <section class="section">
+          <div class="section-header">
+            <h2 class="section-title">הנבחר של השבוע</h2>
+            <span class="section-rule"></span>
+          </div>
+
+          <article class="featured-card" (click)="goToRecipe(recipeOfTheWeek.id)">
+            <div class="featured-card__media">
+              <img [src]="getRecipeImage(recipeOfTheWeek)" [alt]="recipeOfTheWeek.title">
+              <span class="featured-card__chip">{{ recipeData.getCategoryLabel(recipeOfTheWeek.category) }}</span>
+              @if (isRecent(recipeOfTheWeek.created_at)) {
+                <span class="featured-card__ribbon">חדש השבוע</span>
+              }
+            </div>
+            <div class="featured-card__body">
+              <span class="featured-card__eyebrow">המתכון הנבחר</span>
+              <h3 class="featured-card__title">{{ recipeOfTheWeek.title }}</h3>
+              <div class="featured-card__rating">
+                <app-rating-stars [rating]="recipeOfTheWeek.average_rating" [readonly]="true"></app-rating-stars>
+              </div>
+              <p class="featured-card__desc">
+                לחצו למעבר למתכון המלא ולהוראות ההכנה של המנה המנצחת הזו...
+              </p>
+              <div class="featured-card__meta">
+                <span class="featured-card__pill"><i class="fas fa-utensils"></i>{{ recipeOfTheWeek.author }}</span>
+                <span class="featured-card__pill"><i class="fas fa-clock"></i>{{ recipeOfTheWeek.preparation_time }} דק'</span>
+              </div>
+              <span class="btn-primary">למתכון המלא <i class="fas fa-arrow-left"></i></span>
+            </div>
+          </article>
+        </section>
+      }
+
+      <!-- רשת מתכונים מומלצים -->
+      <section class="section">
+        <div class="section-header">
+          <h2 class="section-title">הכי מומלצים בקהילה</h2>
+          <span class="section-rule"></span>
+        </div>
+
+        <ul class="recipe-grid">
+          @for (recipe of recommendedRecipes; track recipe.id) {
+            <li class="recipe-card" (click)="goToRecipe(recipe.id)">
+              <div class="recipe-card__media">
+                <img [src]="getRecipeImage(recipe)" [alt]="recipe.title">
+                <span class="recipe-card__chip">{{ recipeData.getCategoryLabel(recipe.category) }}</span>
+              </div>
+              <div class="recipe-card__body">
+                <h3 class="recipe-card__title">{{ recipe.title }}</h3>
+                <div class="recipe-card__meta">
+                  <app-rating-stars [rating]="recipe.average_rating" [readonly]="true" size="small"></app-rating-stars>
+                </div>
+              </div>
+            </li>
+          } @empty {
+            <p class="empty-state">עדיין אין מתכונים מומלצים להצגה.</p>
+          }
+        </ul>
+      </section>
+
+    </div>
+  </div>
+}

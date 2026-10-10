@@ -1,0 +1,82 @@
+/* ===== מבנה ראשי - בר עליון דביק ===== */
+.nav            { @apply sticky top-0 z-50 bg-white/95 backdrop-blur border-b border-gray-200 shadow-sm; }
+.nav__inner     { @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 lg:h-[72px] flex items-center justify-between gap-4; }
+
+/* ===== לוגו ===== */
+.nav__brand     { @apply shrink-0; }
+.nav__logo      { @apply text-xl sm:text-2xl font-extrabold tracking-wider text-gray-900 no-underline; }
+.nav__logo-dot  { @apply text-brand-500; }
+
+/* ===== תפריט קישורים (דסקטופ) ===== */
+.nav__menu      { @apply hidden lg:flex flex-1 justify-center; }
+.nav__links     { @apply flex items-center gap-6 xl:gap-8 list-none m-0 p-0; }
+
+/* כל קישור ניווט - אנדרליין מונפש ב-hover ובמצב active */
+.nav-link       { @apply relative inline-flex items-center gap-1.5 text-gray-700 text-[15px] font-semibold no-underline py-2 transition-colors duration-200; }
+.nav-link::after{ content: ''; @apply absolute -bottom-0.5 inset-x-0 h-0.5 bg-brand-500 rounded-full scale-x-0 origin-center transition-transform duration-300; }
+@media (hover: hover) {
+  .nav-link:hover         { @apply text-brand-500; }
+  .nav-link:hover::after  { @apply scale-x-100; }
+}
+.nav-link.active          { @apply text-brand-500; }
+.nav-link.active::after   { @apply scale-x-100; }
+
+/* גרסת CTA - "הוספת מתכון" - כפתור outline בולט */
+.nav-link--cta            { @apply px-3.5 py-1.5 border-2 border-brand-500 text-brand-500 rounded-full text-sm; }
+.nav-link--cta::after     { @apply hidden; }
+@media (hover: hover) {
+  .nav-link--cta:hover    { @apply bg-brand-500 text-white; }
+}
+.nav-link--cta.active     { @apply bg-brand-500 text-white; }
+
+/* גרסת אדמין - דיסקרטי עם רקע אפור בהיר */
+.nav-link--admin          { @apply px-3 py-1.5 bg-gray-100 text-gray-700 rounded-md text-sm; }
+.nav-link--admin::after   { @apply hidden; }
+@media (hover: hover) {
+  .nav-link--admin:hover  { @apply bg-gray-900 text-white; }
+}
+.nav-link--admin.active   { @apply bg-gray-900 text-white; }
+
+/* ===== פעולות משתמש (התחברות / רישום / יציאה) ===== */
+.nav__actions   { @apply flex items-center gap-2 sm:gap-3 shrink-0; }
+.nav__login     { @apply text-gray-800 text-sm font-semibold no-underline hidden sm:inline-block transition-colors duration-200; }
+@media (hover: hover) { .nav__login:hover { @apply text-brand-500; } }
+.nav__register  { @apply bg-brand-500 text-white px-4 sm:px-5 py-2 rounded-full text-sm font-bold no-underline shadow-warm transition-all duration-200; }
+@media (hover: hover) {
+  .nav__register:hover { @apply bg-brand-600 -translate-y-0.5; }
+}
+
+/* פרופיל משתמש מחובר */
+.nav__user           { @apply flex items-center gap-2 sm:gap-3; }
+.nav__user-name      { @apply text-sm text-gray-600 hidden md:inline; }
+.nav__user-name strong { @apply text-gray-900 font-bold; }
+.nav__logout         { @apply inline-flex items-center gap-1.5 bg-gray-100 text-gray-700 border-0 px-3 py-1.5 rounded-full text-xs sm:text-sm font-semibold cursor-pointer transition-colors duration-200; }
+.nav__logout span    { @apply hidden sm:inline; }
+@media (hover: hover) { .nav__logout:hover { @apply bg-brand-500 text-white; } }
+
+/* ===== המבורגר (מובייל בלבד) ===== */
+.nav__hamburger      { @apply lg:hidden flex flex-col gap-1 bg-transparent border-0 cursor-pointer p-2 z-50; }
+.nav__hamburger span { @apply block w-6 h-0.5 bg-gray-900 rounded transition-all duration-300; }
+
+/* אנימציית "X" כשפתוח */
+.nav__hamburger.is-active span:nth-child(1) { transform: translateY(6px) rotate(45deg); @apply bg-brand-500; }
+.nav__hamburger.is-active span:nth-child(2) { @apply opacity-0; }
+.nav__hamburger.is-active span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); @apply bg-brand-500; }
+
+/* ===== תפריט נשלף במובייל ===== */
+@media (max-width: 1023.98px) {
+  .nav__menu               { @apply fixed inset-x-0 top-16 bg-white border-b border-gray-200 shadow-lg overflow-hidden;
+                              max-height: 0; transition: max-height 0.35s ease, opacity 0.25s ease;
+                              opacity: 0; display: block; }
+  .nav__menu.active        { max-height: calc(100vh - 4rem); opacity: 1; }
+  .nav__links              { @apply flex-col items-stretch gap-1 p-4 sm:p-6; }
+  .nav__links li           { @apply w-full; }
+  .nav-link                { @apply block w-full py-3 px-4 rounded-lg text-base; }
+  .nav-link::after         { @apply hidden; }
+  @media (hover: hover) {
+    .nav-link:hover        { @apply bg-cream-50; }
+  }
+  .nav-link.active         { @apply bg-cream-100 text-brand-500; }
+  .nav-link--cta           { @apply justify-start py-3 mt-2; }
+  .nav-link--admin         { @apply justify-start py-3; }
+}

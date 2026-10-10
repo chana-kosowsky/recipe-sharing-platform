@@ -1,0 +1,103 @@
+/* ===== מסך טעינה ===== */
+.loader   { @apply flex flex-col items-center justify-center h-screen text-brand-500; }
+.spinner  { @apply w-12 h-12 border-4 border-brand-100 border-t-brand-500 rounded-full animate-spin mb-4; }
+.loader p { @apply text-base sm:text-lg; }
+
+/* ===== מבנה כללי ===== */
+.home      { @apply bg-white min-h-screen; }
+.container { @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8; }
+
+/* ===== Hero - באנר מותג ===== */
+.hero            { @apply relative h-[38vh] sm:h-[42vh] md:h-[48vh] overflow-hidden flex items-center justify-center text-center; }
+.hero__bg        { @apply absolute inset-0 w-full h-full object-cover; }
+.hero::after     { content: ''; @apply absolute inset-0 bg-gradient-to-t from-black/80 via-black/45 to-black/20; }
+.hero__inner     { @apply relative z-10 text-white px-4 max-w-2xl; }
+.hero__eyebrow   { @apply inline-block uppercase tracking-[0.35em] text-xs sm:text-sm text-brand-200 font-medium mb-2; }
+.hero__title     { @apply text-5xl sm:text-6xl md:text-8xl font-extrabold tracking-wide;
+                   text-shadow: 0 4px 24px rgba(0,0,0,0.5); }
+.hero__slogan    { @apply text-base sm:text-lg md:text-2xl font-light opacity-95 mt-2; }
+
+/* ===== כותרת מקטע - בסגנון מגזין ===== */
+.section         { @apply py-10 md:py-14; }
+.section-header  { @apply flex items-center gap-3 mb-6 md:mb-8; }
+.section-title   { @apply text-2xl sm:text-3xl md:text-4xl font-extrabold text-gray-900 tracking-tight whitespace-nowrap; }
+.section-rule    { @apply flex-1 h-px bg-gray-200; }
+.badge-new       { @apply bg-brand-500 text-white text-[10px] sm:text-xs font-bold px-2.5 py-1 rounded-full uppercase tracking-widest animate-pulse-soft whitespace-nowrap; }
+
+/* ===== רשת קטגוריות - צ'יפים נקיים בסגנון מגזין ===== */
+.category-grid          { @apply grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-3 sm:gap-4; }
+.category-tile          { @apply relative flex items-center justify-between gap-2 px-4 sm:px-5 py-3 sm:py-4 bg-white rounded-lg border border-gray-200 cursor-pointer transition-all duration-200 overflow-hidden text-right;
+                          /* פס צד דק בצבע הקטגוריה דרך משתנה CSS שמועבר מה-HTML */
+                          border-inline-start: 4px solid var(--cat-color, theme('colors.brand.500')); }
+.category-tile:active   { @apply scale-[0.98]; }
+@media (hover: hover) {
+  .category-tile:hover  { @apply -translate-y-0.5 shadow-soft border-gray-300; }
+  .category-tile:hover .category-tile__label { color: var(--cat-color); }
+  .category-tile:hover .category-tile__arrow { @apply translate-x-1 opacity-100; color: var(--cat-color); }
+}
+.category-tile__label   { @apply text-sm sm:text-base font-bold text-gray-800 transition-colors duration-200 leading-tight; }
+.category-tile__arrow   { @apply text-gray-300 text-sm transition-all duration-200 opacity-60; }
+
+/* ===== כרטיס מתכון השבוע - פריסת מגזין ===== */
+.featured-card           { @apply grid grid-cols-1 bg-white rounded-3xl overflow-hidden shadow-soft cursor-pointer transition-all duration-300 ring-1 ring-gray-100;
+                          /* פיצול לא-סימטרי בדסקטופ: תמונה ~60% תוכן ~40% */ }
+@screen md { .featured-card { grid-template-columns: 1.4fr 1fr; } }
+.featured-card:active    { @apply scale-[0.995]; }
+@media (hover: hover) {
+  .featured-card:hover                       { @apply shadow-warm ring-brand-200; }
+  .featured-card:hover .featured-card__media img { transform: scale(1.06); }
+  .featured-card:hover .btn-primary          { @apply bg-brand-600 shadow-warm; transform: translateY(-1px); }
+}
+
+/* תמונה - גוברת על העיצוב */
+.featured-card__media     { @apply relative h-64 sm:h-80 md:h-auto md:min-h-[460px] overflow-hidden; }
+.featured-card__media img { @apply w-full h-full object-cover transition-transform duration-[600ms]; }
+.featured-card__media::after { content: ''; @apply absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent pointer-events-none; }
+.featured-card__chip      { @apply absolute top-4 start-4 bg-white/95 backdrop-blur text-gray-800 text-[10px] sm:text-xs font-bold px-3 py-1.5 rounded-full uppercase tracking-widest shadow-sm; }
+
+/* סרט אלכסוני "חדש השבוע" - פינה עליונה שמאלית */
+.featured-card__ribbon    { @apply absolute top-4 end-4 bg-brand-500 text-white text-[10px] sm:text-xs font-extrabold px-3 py-1.5 rounded-full uppercase tracking-widest animate-pulse-soft shadow-warm; }
+
+/* גוף הכרטיס - רקע קרם רך, padding נדיב, פס צבע בצד פנימי */
+.featured-card__body      { @apply relative bg-cream-50 p-6 sm:p-8 md:p-10 lg:p-12 flex flex-col justify-center;
+                          /* פס דק אנכי בצבע המותג בצד הפנימי */ }
+.featured-card__body::before { content: ''; @apply absolute inset-y-8 start-0 w-1 bg-brand-500 rounded-full hidden md:block; }
+
+/* Eyebrow - תווית קטגוריה עליונה */
+.featured-card__eyebrow   { @apply inline-block text-[11px] sm:text-xs font-bold text-brand-500 uppercase tracking-[0.25em] mb-3; }
+
+/* כותרת ראשית - גדולה ובולטת */
+.featured-card__title     { @apply text-3xl sm:text-4xl md:text-5xl font-extrabold text-gray-900 mb-4 leading-[1.1] tracking-tight; }
+
+/* כוכבי דירוג */
+.featured-card__rating    { @apply mb-4; }
+
+/* תיאור קצר */
+.featured-card__desc      { @apply text-gray-600 text-sm sm:text-base leading-relaxed mb-6 max-w-md; }
+
+/* מטא - גלולות עם איקונים */
+.featured-card__meta      { @apply flex flex-wrap gap-2 sm:gap-3 mb-6; }
+.featured-card__pill      { @apply inline-flex items-center gap-2 bg-white border border-gray-200 text-gray-700 text-xs sm:text-sm font-semibold px-3 py-1.5 rounded-full; }
+.featured-card__pill i    { @apply text-brand-500 text-xs; }
+
+/* כפתור CTA - בולט עם צל */
+.btn-primary              { @apply inline-flex items-center gap-2 self-start bg-brand-500 text-white px-6 sm:px-7 py-3 rounded-full font-bold text-sm shadow-warm transition-all duration-200; }
+.btn-primary i            { @apply text-xs; }
+
+/* ===== רשת מתכונים מומלצים ===== */
+.recipe-grid              { @apply grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-5 md:gap-6 list-none p-0 m-0; }
+.recipe-card              { @apply bg-white rounded-xl overflow-hidden cursor-pointer border border-gray-100 shadow-sm transition-all duration-300 flex flex-col; }
+.recipe-card:active       { @apply scale-[0.98]; }
+@media (hover: hover) {
+  .recipe-card:hover      { @apply -translate-y-1 shadow-warm border-brand-200; }
+  .recipe-card:hover .recipe-card__media img { transform: scale(1.05); }
+}
+.recipe-card__media       { @apply relative aspect-[4/3] overflow-hidden; }
+.recipe-card__media img   { @apply w-full h-full object-cover transition-transform duration-500; }
+.recipe-card__chip        { @apply absolute top-2 start-2 sm:top-3 sm:start-3 bg-white/95 backdrop-blur text-gray-800 text-[10px] sm:text-xs font-bold px-2.5 py-1 rounded-full uppercase tracking-wider shadow-sm; }
+.recipe-card__body        { @apply p-3 sm:p-4 flex flex-col gap-2 flex-1; }
+.recipe-card__title       { @apply text-sm sm:text-base md:text-lg font-bold text-gray-900 leading-snug line-clamp-2 min-h-[2.6em]; }
+.recipe-card__meta        { @apply flex items-center justify-between text-xs sm:text-sm text-gray-500 mt-auto; }
+
+/* ===== מצב ריק ===== */
+.empty-state              { @apply text-center text-gray-400 py-10 col-span-full; }

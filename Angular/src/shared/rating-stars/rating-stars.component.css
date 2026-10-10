@@ -1,0 +1,62 @@
+/* ================================
+   ⭐ Rating Stars Component
+================================ */
+
+.stars-container {
+  display: inline-flex;
+  gap: 4px;
+  align-items: center;
+  direction: ltr; /* כיוון שמאל לימין לכוכבים */
+}
+
+/* ================================
+   כוכב בודד
+================================ */
+.star {
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+  color: #ddd; /* צבע ריק */
+}
+
+/* כוכב מלא */
+.star.filled {
+  color: #FFD700; /* זהב */
+}
+
+/* כוכב Hover */
+.star:not(.readonly):hover {
+  transform: scale(1.2);
+  filter: drop-shadow(0 0 4px rgba(255, 215, 0, 0.5));
+}
+
+/* כוכב readonly (לא ניתן ללחיצה) */
+.star.readonly {
+  cursor: default;
+}
+
+/* ================================
+   גדלים
+================================ */
+
+/* Small */
+.size-small .star {
+  font-size: 1rem;
+}
+
+/* Medium (ברירת מחדל) */
+.size-medium .star {
+  font-size: 1.5rem;
+}
+
+/* Large */
+.size-large .star {
+  font-size: 2rem;
+}
+
+/* ================================
+   אנימציה בלחיצה
+================================ */
+.star:active:not(.readonly) {
+  transform: scale(0.9);
+}

@@ -1,0 +1,24 @@
+# סודות
+.env
+.env.local
+
+# סביבה וירטואלית
+.venv/
+venv/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# IDE
+.idea/
+.vscode/
+
+# מסד נתונים מקומי
+instance/
+*.sqlite
+*.db
+
+# העלאות משתמשים (אם נשמרות מקומית)
+uploads/

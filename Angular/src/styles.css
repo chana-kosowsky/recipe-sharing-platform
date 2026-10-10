@@ -1,0 +1,14 @@
+/* פונט עברי */
+@import url('https://fonts.googleapis.com/css2?family=Assistant:wght@300;400;500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* בסיס - רקע לבן (סגנון מגזין), פונט עברי, RTL */
+@layer base {
+  html, body {
+    @apply font-sans bg-white text-gray-700 antialiased;
+  }
+  body { margin: 0; }
+}

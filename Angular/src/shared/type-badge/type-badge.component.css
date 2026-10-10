@@ -1,0 +1,46 @@
+/* מיכל הבאדג' -Badge Container */
+.badge-container {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  border-radius: 50px; /* צורה מעוגלת של קפסולה */
+  cursor: pointer;
+  transition: all 0.25s ease;
+  user-select: none; /* מונע סימון טקסט בטעות בלחיצה */
+  border: 1px solid rgba(0, 0, 0, 0.05); /* מסגרת כמעט שקופה לעומק */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+/* אפקט ריחופ מעל הבאדג' */
+.badge-container:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  filter: brightness(0.95); /* מכהה מעט את הצבע בחיבור */
+}
+
+/* אפקט לחיצה */
+.badge-container:active {
+  transform: scale(0.96);
+}
+
+/* סגנון לאימוג'י */
+.emoji {
+  font-size: 1.1rem;
+  line-height: 1;
+}
+
+/* סגנון לטקסט */
+.text {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #ffffff; /* הנחת עבודה: הצבעים מה-Service כהים מספיק */
+  letter-spacing: 0.3px;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1); /* הופך את הטקסט לקריא יותר על צבעים בהירים */
+}
+
+/* התאמה למקרה שהצבע חוזר כ-rgba או צבע בהיר מאוד */
+:host-context(.sidebar) .badge-container {
+    width: 100%; /* אם הוא בתוך הסיידבר, שיתפוס את כל הרוחב */
+    justify-content: center;
+}

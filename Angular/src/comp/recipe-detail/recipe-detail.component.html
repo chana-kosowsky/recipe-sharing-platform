@@ -1,0 +1,237 @@
+<div class="recipe-detail">
+
+  <!-- מצב טעינה -->
+  @if (isLoading) {
+    <div class="state state--loading">
+      <div class="spinner"></div>
+      <p>טוען מתכון...</p>
+    </div>
+  }
+
+  <!-- הודעת שגיאה -->
+  @if (errorMessage && !isLoading) {
+    <div class="alert alert--error">
+      <i class="fas fa-circle-exclamation"></i>
+      <span>{{ errorMessage }}</span>
+    </div>
+  }
+
+  <!-- הודעת הצלחה (אחרי מחיקה) -->
+  @if (successMessage) {
+    <div class="alert alert--success">
+      <i class="fas fa-circle-check"></i>
+      <span>{{ successMessage }}</span>
+    </div>
+  }
+
+  <!-- תצוגת המתכון -->
+  @if (recipe && !isLoading) {
+    <article class="recipe">
+
+      <!-- שורת פעולות עליונה -->
+      <div class="action-bar">
+        <button class="action-bar__back" (click)="goBack()">
+          <i class="fas fa-arrow-right"></i>
+          <span>חזרה למתכונים</span>
+        </button>
+
+        @if (isAdmin()) {
+          <button class="action-bar__delete" (click)="openDeleteModal()">
+            <i class="fas fa-trash"></i>
+            <span>מחק מתכון</span>
+          </button>
+        }
+      </div>
+
+      <!-- כותרת עריכתית - eyebrow + שם המתכון + מאת -->
+      <header class="recipe-header">
+        @if (recipe.category) {
+          <span class="recipe-header__eyebrow">{{ getCategoryLabel(recipe.category) }}</span>
+        }
+        <h1 class="recipe-header__title">{{ recipe.title }}</h1>
+        <p class="recipe-header__byline">מאת <strong>{{ recipe.author }}</strong></p>
+      </header>
+
+      <!-- תמונה ראשית בגדול -->
+      @if (recipe.image_path) {
+        <figure class="poster" (click)="openFullImage()">
+          <img [src]="getRecipeImage(selectedEffect)" [alt]="recipe.title" (error)="onImageError($event)">
+          <figcaption class="poster__zoom">
+            <i class="fas fa-magnifying-glass-plus"></i> לחצו להגדלה
+          </figcaption>
+        </figure>
+      }
+
+      <!-- שורת מטא - זמן/סוג/דירוג ממוצע -->
+      <div class="meta-strip">
+        <div class="meta-card">
+          <i class="fas fa-clock"></i>
+          <div>
+            <span class="meta-card__label">זמן הכנה</span>
+            <strong class="meta-card__value">{{ recipe.preparation_time }} דקות</strong>
+          </div>
+        </div>
+
+        <div class="meta-card meta-card--type">
+          <span class="meta-card__label">סוג מנה</span>
+          <app-type-badge [type]="recipe.type"></app-type-badge>
+        </div>
+
+        <div class="meta-card meta-card--rating">
+          <i class="fas fa-star"></i>
+          <div>
+            <span class="meta-card__label">דירוג ממוצע</span>
+            <div class="meta-card__stars">
+              <app-rating-stars [rating]="recipe.average_rating" [readonly]="true" size="medium"></app-rating-stars>
+              <strong>{{ recipe.average_rating.toFixed(1) }} / 5</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- קופסת דירוג המשתמש -->
+      <div class="user-rating">
+        <h3 class="user-rating__title">נהניתם מהמתכון?</h3>
+        <p class="user-rating__subtitle">דרגו אותו ועזרו לקהילה למצוא את הטוב ביותר</p>
+        <app-rating-stars [rating]="userRating" [readonly]="false" size="large" (ratingChange)="onRatingChange($event)"></app-rating-stars>
+      </div>
+
+      <!-- גוף המתכון - שתי עמודות בדסקטופ -->
+      <div class="recipe-body">
+
+        <!-- עמודת רכיבים (sticky בדסקטופ) -->
+        <aside class="ingredients-column">
+          <div class="ingredients-card">
+            <h2 class="section-title">
+              <i class="fas fa-basket-shopping"></i> רכיבים
+            </h2>
+
+            @if (recipe.ingredients && recipe.ingredients.length > 0) {
+              <ul class="ingredients-list">
+                @for (ingredient of recipe.ingredients; track ingredient.id) {
+                  <li class="ingredient">
+                    <i class="fas fa-check ingredient__check"></i>
+                    <span class="ingredient__amount">{{ ingredient.amount }} {{ ingredient.unit }}</span>
+                    <span class="ingredient__product">{{ ingredient.product }}</span>
+                  </li>
+                }
+              </ul>
+            } @else {
+              <p class="no-data">אין רכיבים מוגדרים למתכון זה</p>
+            }
+          </div>
+        </aside>
+
+        <!-- עמודת הוראות + גלריה -->
+        <main class="instructions-column">
+
+          <!-- הוראות הכנה כצעדים ממוספרים -->
+          <section class="recipe-section">
+            <h2 class="section-title">
+              <i class="fas fa-list-ol"></i> הוראות הכנה
+            </h2>
+
+            <ol class="steps">
+              @for (step of (recipe.instructions || '').split('\n'); track $index; let i = $index) {
+                @if (step.trim()) {
+                  <li class="step">
+                    <span class="step__num">{{ i + 1 }}</span>
+                    <p class="step__text">{{ step }}</p>
+                  </li>
+                }
+              }
+            </ol>
+          </section>
+
+          <!-- גלריית אפקטים - מוצגת רק אם יש וריאציות -->
+          @if (recipe.image_path && hasVariations()) {
+            <section class="recipe-section">
+              <h2 class="section-title">
+                <i class="fas fa-images"></i> גלריית אפקטים
+              </h2>
+              <p class="section-hint">לחצו על תמונה כדי לשנות את התצוגה למעלה</p>
+
+              <div class="thumbs">
+                <button class="thumb" [class.active]="selectedEffect === 'original'" (click)="selectedEffect = 'original'">
+                  <img [src]="getRecipeImage('original')" [alt]="recipe.title + ' - מקורי'" (error)="onImageError($event)">
+                  <span>מקורי</span>
+                </button>
+                <button class="thumb" [class.active]="selectedEffect === 'grayscale'" (click)="selectedEffect = 'grayscale'">
+                  <img [src]="getRecipeImage('grayscale')" [alt]="recipe.title + ' - שחור לבן'" (error)="onImageError($event)">
+                  <span>שחור-לבן</span>
+                </button>
+                <button class="thumb" [class.active]="selectedEffect === 'vibrant'" (click)="selectedEffect = 'vibrant'">
+                  <img [src]="getRecipeImage('vibrant')" [alt]="recipe.title + ' - זוהר'" (error)="onImageError($event)">
+                  <span>זוהר</span>
+                </button>
+                <button class="thumb" [class.active]="selectedEffect === 'vintage'" (click)="selectedEffect = 'vintage'">
+                  <img [src]="getRecipeImage('vintage')" [alt]="recipe.title + ' - וינטג'" (error)="onImageError($event)">
+                  <span>וינטג'</span>
+                </button>
+              </div>
+            </section>
+          }
+
+          <!-- אין תמונות -->
+          @if (!recipe.image_path) {
+            <section class="recipe-section">
+              <div class="no-image">
+                <i class="fas fa-image"></i>
+                <p>אין תמונות למתכון זה</p>
+              </div>
+            </section>
+          }
+        </main>
+      </div>
+
+      <!-- שורת תחתית -->
+      <footer class="recipe-footer">
+        <p>פורסם בתאריך {{ recipe.created_at | date:'dd/MM/yyyy' }}</p>
+      </footer>
+
+    </article>
+
+    <!-- שף AI - כפתור צף ופאנל בהקשר של המתכון -->
+    <app-ai-chef-panel [recipe]="recipe"></app-ai-chef-panel>
+  }
+
+</div>
+
+<!-- מודל מחיקה -->
+@if (showDeleteModal) {
+  <div class="modal-overlay" (click)="closeDeleteModal()">
+    <div class="modal" (click)="$event.stopPropagation()">
+
+      <button class="modal__close" (click)="closeDeleteModal()" aria-label="סגירה">
+        <i class="fas fa-xmark"></i>
+      </button>
+
+      <div class="modal__icon">
+        <i class="fas fa-triangle-exclamation"></i>
+      </div>
+
+      <h2 class="modal__title">מחיקת מתכון</h2>
+
+      <p class="modal__message">
+        האם אתה בטוח שברצונך למחוק את המתכון <strong>"{{ recipe?.title }}"</strong>?
+        <br>
+        <span class="modal__warning">פעולה זו לא ניתנת לביטול.</span>
+      </p>
+
+      <div class="modal__actions">
+        <button class="btn btn--cancel" (click)="closeDeleteModal()" [disabled]="isDeleting">
+          ביטול
+        </button>
+
+        <button class="btn btn--danger" (click)="confirmDelete()" [disabled]="isDeleting">
+          @if (isDeleting) {
+            <span class="spinner-small"></span><span>מוחק...</span>
+          } @else {
+            <i class="fas fa-trash"></i><span>מחק לצמיתות</span>
+          }
+        </button>
+      </div>
+
+    </div>
+  </div>
+}

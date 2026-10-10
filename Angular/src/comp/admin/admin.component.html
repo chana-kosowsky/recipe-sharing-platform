@@ -1,0 +1,151 @@
+<div class="admin">
+
+  <!-- כותרת עליונה - לוח בקרה -->
+  <header class="page-header">
+    <span class="page-header__eyebrow">לוח בקרה</span>
+    <h1 class="page-header__title">ניהול מערכת<span class="page-header__dot">.</span></h1>
+    <p class="page-header__subtitle">אישור משתמשים חדשים להעלאת מתכונים לקהילה</p>
+  </header>
+
+  <!-- מצב טעינה -->
+  @if (loading) {
+    <div class="state state--loading">
+      <div class="spinner"></div>
+      <p>טוען נתונים...</p>
+    </div>
+  }
+
+  <!-- התראות -->
+  @if (errorMessage) {
+    <div class="alert alert--error">
+      <i class="fas fa-circle-exclamation"></i>
+      <span>{{ errorMessage }}</span>
+    </div>
+  }
+
+  @if (successMessage) {
+    <div class="alert alert--success">
+      <i class="fas fa-circle-check"></i>
+      <span>{{ successMessage }}</span>
+    </div>
+  }
+
+  <!-- מצב ריק - אין בקשות ממתינות -->
+  @if (!loading && pendingUsers.length === 0) {
+    <div class="empty">
+      <div class="empty__icon"><i class="fas fa-inbox"></i></div>
+      <h2 class="empty__title">אין בקשות ממתינות</h2>
+      <p class="empty__text">כשיגיעו בקשות חדשות הן יופיעו כאן</p>
+    </div>
+  }
+
+  <!-- רשימת משתמשים ממתינים -->
+  @if (!loading && pendingUsers.length > 0) {
+
+    <!-- כרטיס סטטיסטיקה -->
+    <div class="stat-bar">
+      <div class="stat-bar__icon"><i class="fas fa-user-clock"></i></div>
+      <div class="stat-bar__content">
+        <span class="stat-bar__label">בקשות ממתינות</span>
+        <strong class="stat-bar__count">{{ pendingUsers.length }}</strong>
+      </div>
+      <span class="stat-bar__hint">דורש את תשומת לבכם</span>
+    </div>
+
+    <!-- כותרת מקטע -->
+    <div class="section-header">
+      <h2 class="section-title">בקשות פעילות</h2>
+      <span class="section-rule"></span>
+    </div>
+
+    <!-- כרטיסי משתמשים -->
+    <ul class="users">
+      @for (user of pendingUsers; track user.id) {
+        <li class="user-row">
+
+          <!-- אווטאר + שם + אימייל -->
+          <div class="user-row__identity">
+            <span class="user-row__avatar">{{ user.username.charAt(0).toUpperCase() }}</span>
+            <div class="user-row__info">
+              <h3 class="user-row__name">{{ user.username }}</h3>
+              <p class="user-row__email">
+                <i class="fas fa-envelope"></i> {{ user.email }}
+              </p>
+            </div>
+          </div>
+
+          <!-- מטא - תפקיד ומזהה -->
+          <div class="user-row__meta">
+            <span class="user-row__role">
+              <i class="fas fa-book-open"></i> {{ user.role }}
+            </span>
+            <span class="user-row__id">#{{ user.id }}</span>
+          </div>
+
+          <!-- כפתורי פעולה -->
+          <div class="user-row__actions">
+            <button class="btn btn--approve" (click)="openModal('approve', user)" title="אשר משתמש">
+              <i class="fas fa-check"></i> <span>אשר</span>
+            </button>
+            <button class="btn btn--reject" (click)="openModal('reject', user)" title="דחה בקשה">
+              <i class="fas fa-xmark"></i> <span>דחה</span>
+            </button>
+          </div>
+
+        </li>
+      }
+    </ul>
+  }
+</div>
+
+<!-- מודל אישור/דחייה -->
+@if (showModal) {
+  <div class="modal-overlay" (click)="closeModal()">
+    <div class="modal" (click)="$event.stopPropagation()">
+
+      <button class="modal__close" (click)="closeModal()" aria-label="סגירה">
+        <i class="fas fa-xmark"></i>
+      </button>
+
+      <!-- אייקון - ירוק לאישור, אדום לדחייה -->
+      <div class="modal__icon"
+           [class.modal__icon--approve]="modalAction === 'approve'"
+           [class.modal__icon--reject]="modalAction === 'reject'">
+        @if (modalAction === 'approve') { <i class="fas fa-user-check"></i> }
+        @if (modalAction === 'reject')  { <i class="fas fa-user-xmark"></i> }
+      </div>
+
+      <h2 class="modal__title">
+        {{ modalAction === 'approve' ? 'אישור משתמש' : 'דחיית בקשה' }}
+      </h2>
+
+      <p class="modal__message">
+        @if (modalAction === 'approve') {
+          האם לאשר את <strong>{{ selectedUser?.username }}</strong> כ-Uploader?
+          <br>
+          <span class="modal__note">המשתמש יוכל להתחיל להעלות מתכונים מיד.</span>
+        } @else {
+          האם לדחות את הבקשה של <strong>{{ selectedUser?.username }}</strong>?
+          <br>
+          <span class="modal__note">ניתן יהיה לשלוח בקשה חוזרת בכל עת.</span>
+        }
+      </p>
+
+      <div class="modal__actions">
+        <button class="btn btn--cancel" (click)="closeModal()">ביטול</button>
+
+        @if (modalAction === 'approve') {
+          <button class="btn btn--approve-solid" (click)="confirmApprove()">
+            <i class="fas fa-check"></i><span>אשר משתמש</span>
+          </button>
+        }
+        @if (modalAction === 'reject') {
+          <button class="btn btn--reject-solid" (click)="confirmReject()">
+            <i class="fas fa-xmark"></i><span>דחה בקשה</span>
+          </button>
+        }
+      </div>
+
+    </div>
+  </div>
+}

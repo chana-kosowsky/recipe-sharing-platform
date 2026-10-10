@@ -1,0 +1,127 @@
+/* ===== מבנה ===== */
+.profile        { @apply max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12; }
+
+/* ===== כותרת עליונה ===== */
+.page-header             { @apply text-center mb-8 md:mb-10; }
+.page-header__eyebrow    { @apply inline-block text-[11px] sm:text-xs font-bold text-brand-500 uppercase tracking-[0.3em] mb-3; }
+.page-header__title      { @apply text-3xl sm:text-4xl md:text-5xl font-extrabold text-gray-900 tracking-tight leading-none m-0; }
+.page-header__dot        { @apply text-brand-500; }
+
+/* ===== התראות ===== */
+.alert                   { @apply flex items-center gap-3 px-5 py-3.5 rounded-xl text-sm sm:text-base font-semibold mb-5; }
+.alert i                 { @apply text-xl shrink-0; }
+.alert--success          { @apply bg-green-50 border border-green-200 text-green-700; }
+.alert--error            { @apply bg-red-50 border border-red-200 text-red-700; }
+
+/* ===== כרטיס פרופיל ===== */
+.profile-card                { @apply relative bg-white rounded-2xl shadow-soft border border-gray-100 overflow-hidden flex flex-col md:flex-row md:items-center gap-5 md:gap-8 p-6 sm:p-8 md:p-10 mb-6; }
+.profile-card::before        { content: ''; @apply absolute inset-x-0 top-0 h-1.5 bg-gradient-to-l from-brand-500 via-brand-400 to-brand-300; }
+
+/* אווטאר עם גרדיאנט וצל */
+.profile-card__avatar        { @apply shrink-0 mx-auto md:mx-0; }
+.profile-card__initial       { @apply flex items-center justify-center w-24 h-24 sm:w-28 sm:h-28 md:w-32 md:h-32 rounded-full text-white text-4xl sm:text-5xl md:text-6xl font-extrabold shadow-warm select-none;
+                                background-image: linear-gradient(135deg, theme('colors.brand.400'), theme('colors.brand.600')); }
+
+/* פרטי משתמש */
+.profile-card__info          { @apply flex-1 text-center md:text-right min-w-0; }
+.profile-card__name          { @apply text-2xl sm:text-3xl md:text-4xl font-extrabold text-gray-900 tracking-tight m-0 mb-1; }
+.profile-card__email         { @apply text-sm sm:text-base text-gray-500 m-0 mb-4 break-words; }
+.profile-card__email i       { @apply text-brand-500 text-xs me-1; }
+
+/* תגית תפקיד */
+.role-badge                  { @apply inline-flex items-center gap-2 text-xs sm:text-sm font-bold px-4 py-1.5 rounded-full uppercase tracking-wider mb-5; }
+.role-badge__icon            { @apply text-base; }
+.role-badge.admin            { @apply bg-gradient-to-l from-yellow-400 to-amber-400 text-amber-900 shadow-warm; }
+.role-badge.uploader         { @apply bg-brand-500 text-white shadow-warm; }
+.role-badge.reader           { @apply bg-gray-100 text-gray-700; }
+
+/* סטטיסטיקות - שני כרטיסי מידע */
+.stats                       { @apply grid grid-cols-2 gap-3 sm:gap-4 mt-4; }
+.stat                        { @apply bg-cream-50 border border-cream-200 rounded-xl p-3 sm:p-4 text-center md:text-right; }
+.stat__num                   { @apply block text-lg sm:text-xl md:text-2xl font-extrabold text-gray-900; }
+.stat__label                 { @apply block text-[10px] sm:text-xs font-bold text-gray-500 uppercase tracking-wider mt-1; }
+
+/* ===== כרטיסי סטטוס בקשה ===== */
+.status-card                  { @apply flex flex-col sm:flex-row sm:items-center gap-4 rounded-2xl p-5 sm:p-6 mb-6 border; }
+.status-card__icon            { @apply w-14 h-14 rounded-full inline-flex items-center justify-center text-2xl shrink-0 self-start sm:self-center; }
+.status-card__body            { @apply flex-1 min-w-0; }
+.status-card__title           { @apply text-lg sm:text-xl font-extrabold m-0 mb-1; }
+.status-card__text            { @apply text-sm sm:text-base m-0 leading-relaxed; }
+
+/* CTA - הזמנה לשלוח בקשה (Reader) */
+.status-card--cta             { @apply bg-cream-50 border-cream-200; }
+.status-card--cta .status-card__icon  { @apply bg-brand-100 text-brand-500; }
+.status-card--cta .status-card__title { @apply text-gray-900; }
+.status-card--cta .status-card__text  { @apply text-gray-600; }
+
+/* ממתין לאישור - צבע צהוב */
+.status-card--pending         { @apply bg-yellow-50 border-yellow-200; }
+.status-card--pending .status-card__icon  { @apply bg-yellow-100 text-yellow-700; }
+.status-card--pending .status-card__title { @apply text-yellow-900; }
+.status-card--pending .status-card__text  { @apply text-yellow-800; }
+
+/* נדחתה - צבע אדום */
+.status-card--rejected        { @apply bg-red-50 border-red-200; }
+.status-card--rejected .status-card__icon  { @apply bg-red-100 text-red-600; }
+.status-card--rejected .status-card__title { @apply text-red-900; }
+.status-card--rejected .status-card__text  { @apply text-red-800; }
+
+/* ===== המתכונים שלי - כותרת מקטע ===== */
+.my-recipes                   { @apply mt-10 md:mt-12; }
+.section-header               { @apply flex items-center gap-3 mb-6; }
+.section-title                { @apply text-2xl sm:text-3xl font-extrabold text-gray-900 tracking-tight whitespace-nowrap m-0; }
+.section-rule                 { @apply flex-1 h-px bg-gray-200; }
+
+/* ===== רשת מתכונים - זהה למסך רשימת המתכונים ===== */
+.recipes-grid                 { @apply grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-5 md:gap-6 list-none p-0 m-0; }
+.recipe-card                  { @apply bg-white rounded-2xl overflow-hidden cursor-pointer border border-gray-100 shadow-sm transition-all duration-300 flex flex-col h-full; }
+.recipe-card:active           { @apply scale-[0.98]; }
+@media (hover: hover) {
+  .recipe-card:hover          { @apply -translate-y-1 shadow-warm border-brand-200; }
+  .recipe-card:hover .recipe-card__img { transform: scale(1.06); }
+}
+.recipe-card__media           { @apply relative aspect-[4/3] overflow-hidden; }
+.recipe-card__img             { @apply w-full h-full object-cover transition-transform duration-[600ms]; }
+.recipe-card__type-badge      { @apply absolute top-2.5 start-2.5 sm:top-3 sm:start-3; }
+.recipe-card__body            { @apply p-3 sm:p-4 flex flex-col gap-2 flex-1; }
+.recipe-card__title           { @apply text-sm sm:text-base md:text-lg font-bold text-gray-900 leading-snug line-clamp-2 min-h-[2.6em] m-0; }
+.recipe-card__meta            { @apply flex items-center justify-between text-xs sm:text-sm text-gray-500 mt-auto; }
+.recipe-card__meta i          { @apply text-brand-500 text-[10px] me-1; }
+.recipe-card__rating          { @apply font-bold text-gray-800; }
+.recipe-card__rating i        { @apply text-yellow-400; }
+
+/* ===== מצב ריק - אין מתכונים ===== */
+.empty                        { @apply flex flex-col items-center justify-center text-center bg-cream-50 border border-cream-200 rounded-2xl py-12 md:py-16 px-6; }
+.empty__icon                  { @apply w-20 h-20 rounded-full bg-cream-100 text-brand-500 text-3xl inline-flex items-center justify-center mb-4; }
+.empty__title                 { @apply text-xl sm:text-2xl font-extrabold text-gray-900 m-0 mb-2; }
+.empty__text                  { @apply text-sm sm:text-base text-gray-600 m-0 mb-6; }
+
+/* ===== מצב טעינה ===== */
+.state                        { @apply flex flex-col items-center justify-center text-center py-12 md:py-16 px-4; }
+.state p                      { @apply text-base text-gray-600 m-0; }
+.state--loading               { @apply text-brand-500; }
+.spinner                      { @apply w-12 h-12 border-4 border-brand-100 border-t-brand-500 rounded-full animate-spin mb-4; }
+
+/* ===== כפתורים ===== */
+.btn                          { @apply inline-flex items-center justify-center gap-2 px-5 sm:px-6 py-2.5 sm:py-3 rounded-full font-bold text-sm border-0 cursor-pointer transition-all duration-200; text-decoration: none; }
+.btn[disabled]                { @apply opacity-60 cursor-not-allowed; }
+.btn i                        { @apply text-xs; }
+.btn--brand                   { @apply bg-brand-500 text-white shadow-warm; }
+@media (hover: hover) { .btn--brand:not([disabled]):hover { @apply bg-brand-600 -translate-y-0.5; } }
+.btn--cancel                  { @apply bg-gray-100 text-gray-700; }
+@media (hover: hover) { .btn--cancel:not([disabled]):hover { @apply bg-gray-200; } }
+
+/* ===== מודל ===== */
+.modal-overlay                { @apply fixed inset-0 z-50 bg-black/60 backdrop-blur flex items-center justify-center p-4;
+                                animation: fadeIn 0.2s ease-out; }
+.modal                        { @apply relative bg-white rounded-2xl w-full max-w-md p-6 sm:p-8 shadow-2xl text-center;
+                                animation: scaleIn 0.25s ease-out; }
+.modal__close                 { @apply absolute top-3 end-3 w-9 h-9 rounded-full bg-gray-100 text-gray-600 border-0 cursor-pointer flex items-center justify-center transition-colors duration-200; }
+@media (hover: hover) { .modal__close:hover { @apply bg-gray-900 text-white; } }
+.modal__icon                  { @apply w-16 h-16 mx-auto rounded-full bg-brand-100 text-brand-500 text-2xl inline-flex items-center justify-center mb-4; }
+.modal__title                 { @apply text-2xl font-extrabold text-gray-900 m-0 mb-3; }
+.modal__message               { @apply text-gray-600 text-sm sm:text-base leading-relaxed m-0 mb-6; }
+.modal__actions               { @apply flex gap-3 justify-center flex-wrap; }
+
+@keyframes fadeIn  { from { opacity: 0; } to { opacity: 1; } }
+@keyframes scaleIn { from { opacity: 0; transform: scale(0.92); } to { opacity: 1; transform: scale(1); } }

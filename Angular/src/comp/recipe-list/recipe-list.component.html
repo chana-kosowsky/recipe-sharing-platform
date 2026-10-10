@@ -1,0 +1,160 @@
+<div class="recipes-page">
+
+  <!-- כותרת עליונה - באנר עריכתי עם מספר תוצאות -->
+  <header class="recipes-hero">
+    <div class="recipes-hero__inner">
+      <span class="recipes-hero__eyebrow">קולקציית המתכונים</span>
+      <h1 class="recipes-hero__title">המתכונים שלנו<span class="recipes-hero__dot">.</span></h1>
+      <p class="recipes-hero__subtitle">
+        @if (hasActiveFilters()) {
+          מצאנו <strong>{{ displayedRecipes.length }}</strong> מתכונים שתאהבו
+        } @else {
+          גלו השראה קולינרית יומיומית
+        }
+      </p>
+    </div>
+  </header>
+
+  <!-- שורת פילטרים - חיפוש, קטגוריה, סוג, מיון, איפוס -->
+  <section class="filter-bar">
+    <div class="filter-bar__inner">
+
+      <!-- חיפוש -->
+      <div class="filter-search">
+        <i class="fas fa-search filter-search__icon"></i>
+        <input
+          type="text"
+          [(ngModel)]="searchText"
+          (input)="applyFiltersAndSort()"
+          placeholder="חפשו מתכון או בשלן..."
+          class="filter-search__input">
+        @if (searchText) {
+          <button class="filter-search__clear"
+                  (click)="searchText = ''; applyFiltersAndSort()"
+                  aria-label="נקה חיפוש">
+            <i class="fas fa-xmark"></i>
+          </button>
+        }
+      </div>
+
+      <!-- קטגוריה -->
+      <div class="filter-group">
+        <label class="filter-label">קטגוריה</label>
+        <select
+          [(ngModel)]="selectedCategory"
+          (ngModelChange)="applyFiltersAndSort()"
+          class="filter-select">
+          @for (cat of recipeCategories; track cat.value) {
+            <option [value]="cat.value">{{ cat.label }}</option>
+          }
+        </select>
+      </div>
+
+      <!-- סוג מנה - גלולות -->
+      <div class="filter-group">
+        <label class="filter-label">סוג מנה</label>
+        <div class="filter-pills">
+          <button (click)="onTypeFilter('')"      [class.active]="!selectedType"               class="pill">הכל</button>
+          <button (click)="onTypeFilter('Dairy')" [class.active]="selectedType === 'Dairy'"    class="pill">חלבי</button>
+          <button (click)="onTypeFilter('Meat')"  [class.active]="selectedType === 'Meat'"     class="pill">בשרי</button>
+          <button (click)="onTypeFilter('Parve')" [class.active]="selectedType === 'Parve'"    class="pill">פרווה</button>
+        </div>
+      </div>
+
+      <!-- מיון - גלולות עם איקון -->
+      <div class="filter-group">
+        <label class="filter-label">מיון</label>
+        <div class="filter-pills">
+          <button (click)="changeSortBy('time')"   [class.active]="sortBy === 'time'"   class="pill">
+            <i class="fas fa-clock"></i> זמן
+          </button>
+          <button (click)="changeSortBy('rating')" [class.active]="sortBy === 'rating'" class="pill">
+            <i class="fas fa-star"></i> דירוג
+          </button>
+        </div>
+      </div>
+
+      <!-- איפוס - מופיע רק אם יש סינון פעיל -->
+      @if (hasActiveFilters()) {
+        <button class="filter-reset" (click)="resetFilters()">
+          <i class="fas fa-rotate-left"></i> נקה הכל
+        </button>
+      }
+
+    </div>
+  </section>
+
+  <!-- אזור התוכן הראשי -->
+  <main class="recipes-main">
+
+    <!-- מצב טעינה -->
+    @if (isLoading) {
+      <div class="state-card state-card--loading">
+        <div class="spinner"></div>
+        <p>טוען מתכונים...</p>
+      </div>
+    }
+
+    <!-- שגיאה -->
+    @if (errorMessage && !isLoading) {
+      <div class="state-card state-card--error">
+        <i class="fas fa-circle-exclamation"></i>
+        <p>{{ errorMessage }}</p>
+      </div>
+    }
+
+    <!-- רשת מתכונים -->
+    @if (!isLoading && !errorMessage && displayedRecipes.length > 0) {
+      <ul class="recipes-grid">
+        @for (recipe of displayedRecipes; track recipe.id) {
+          <li>
+            <article class="recipe-card" (click)="viewRecipe(recipe.id)">
+              <div class="recipe-card__media">
+                <img [src]="getRecipeImage(recipe)" [alt]="recipe.title" class="recipe-card__img">
+                @if (recipe.category) {
+                  <span class="recipe-card__category">{{ getCategoryLabel(recipe.category) }}</span>
+                }
+                <span class="recipe-card__time">
+                  <i class="fas fa-clock"></i>{{ recipe.preparation_time }} דק'
+                </span>
+              </div>
+
+              <div class="recipe-card__body">
+                <h3 class="recipe-card__title">{{ recipe.title }}</h3>
+                <p class="recipe-card__author">מאת <strong>{{ recipe.author }}</strong></p>
+
+                <div class="recipe-card__footer">
+                  <span class="recipe-card__rating">
+                    <i class="fas fa-star"></i>{{ recipe.average_rating.toFixed(1) }}
+                  </span>
+                  <span class="recipe-card__link">למתכון <i class="fas fa-arrow-left"></i></span>
+                </div>
+              </div>
+            </article>
+          </li>
+        }
+      </ul>
+    }
+
+    <!-- אין תוצאות -->
+    @if (!isLoading && !errorMessage && displayedRecipes.length === 0) {
+      <div class="state-card state-card--empty">
+        <div class="state-card__icon">
+          <i [class]="allRecipes.length > 0 ? 'fas fa-magnifying-glass' : 'fas fa-utensils'"></i>
+        </div>
+        <h2>{{ allRecipes.length > 0 ? 'לא מצאנו מתכונים כאלו' : 'אין כאן מתכונים עדיין' }}</h2>
+        <p>{{ allRecipes.length > 0 ? 'נסו לשנות את הסינון או החיפוש' : 'היו הראשונים להוסיף מתכון לקהילה!' }}</p>
+        @if (allRecipes.length > 0) {
+          <button class="btn-primary" (click)="resetFilters()">
+            <i class="fas fa-rotate-left"></i> חזרה לכל המתכונים
+          </button>
+        } @else {
+          <button class="btn-primary" routerLink="/recipe/add">
+            <i class="fas fa-plus"></i> הוסף מתכון ראשון
+          </button>
+        }
+      </div>
+    }
+
+  </main>
+</div>

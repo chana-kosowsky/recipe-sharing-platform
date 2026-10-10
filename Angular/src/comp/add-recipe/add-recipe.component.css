@@ -1,0 +1,111 @@
+/* ===== מבנה דף ===== */
+.add-recipe         { @apply bg-cream-50 min-h-screen; }
+.add-recipe         { @apply max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12; }
+
+/* ===== כותרת עליונה ===== */
+.page-header             { @apply text-center mb-8 md:mb-10; }
+.page-header__eyebrow    { @apply inline-block text-[11px] sm:text-xs font-bold text-brand-500 uppercase tracking-[0.3em] mb-3; }
+.page-header__title      { @apply text-3xl sm:text-4xl md:text-5xl font-extrabold text-gray-900 tracking-tight leading-none m-0; }
+.page-header__dot        { @apply text-brand-500; }
+.page-header__subtitle   { @apply text-sm sm:text-base text-gray-600 mt-3 m-0; }
+
+/* ===== התראות ===== */
+.alert                   { @apply flex items-center gap-3 px-5 py-3.5 rounded-xl text-sm sm:text-base font-semibold mb-6 sticky top-20 z-20; }
+.alert i                 { @apply text-xl shrink-0; }
+.alert--success          { @apply bg-green-50 border border-green-200 text-green-700; }
+.alert--error            { @apply bg-red-50 border border-red-200 text-red-700; }
+
+/* ===== טופס - מבנה כללי ===== */
+.form                    { @apply flex flex-col gap-5 md:gap-6; }
+
+/* ===== כרטיס שלב ===== */
+.form-card               { @apply bg-white rounded-2xl shadow-soft border border-gray-100 overflow-hidden; }
+.form-card__head         { @apply flex items-start gap-4 px-5 sm:px-7 pt-5 sm:pt-6 pb-2; }
+.form-card__step         { @apply w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-brand-500 text-white text-base font-extrabold inline-flex items-center justify-center shrink-0 shadow-warm; }
+.form-card__title        { @apply text-lg sm:text-xl md:text-2xl font-extrabold text-gray-900 m-0; }
+.form-card__hint         { @apply text-xs sm:text-sm text-gray-500 mt-1 m-0; }
+.form-card__body         { @apply px-5 sm:px-7 pb-6 pt-4 flex flex-col gap-4 sm:gap-5; }
+
+/* ===== שדה - תווית + קלט + שגיאה ===== */
+.field                   { @apply flex flex-col gap-1.5; }
+.field__label            { @apply text-sm font-bold text-gray-800; }
+.field__req              { @apply text-brand-500; }
+
+/* קלט גנרי - input/textarea/select */
+.field__input            { @apply w-full bg-white border border-gray-200 rounded-xl px-4 py-2.5 text-sm sm:text-base text-gray-800 placeholder:text-gray-400 outline-none transition-all duration-200; }
+.field__input:hover      { @apply border-gray-300; }
+.field__input:focus      { @apply border-brand-300 ring-2 ring-brand-100; }
+.field__input--area      { @apply font-sans resize-y min-h-[160px] leading-relaxed; }
+
+/* select עם חץ מותאם */
+.field__input--select    { @apply appearance-none pe-10 cursor-pointer;
+                            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%23666'%3E%3Cpath fill-rule='evenodd' d='M5.23 7.21a.75.75 0 011.06.02L10 11.06l3.71-3.83a.75.75 0 111.08 1.04l-4.25 4.39a.75.75 0 01-1.08 0L5.21 8.27a.75.75 0 01.02-1.06z' clip-rule='evenodd'/%3E%3C/svg%3E");
+                            background-repeat: no-repeat;
+                            background-position: left 0.75rem center;
+                            background-size: 1.1rem; }
+
+/* מצבי תיקוף - אדום/ירוק */
+.field__input.invalid    { @apply border-red-400 bg-red-50/40; }
+.field__input.invalid:focus { @apply border-red-500 ring-red-100; }
+.field__input.valid      { @apply border-green-400; }
+
+.field__error            { @apply flex flex-col gap-0.5 text-xs sm:text-sm font-semibold text-red-600 mt-0.5; }
+
+/* רשת שדות - 1/2/3 עמודות */
+.field-grid              { @apply grid gap-4 sm:gap-5; }
+.field-grid--three       { @apply grid-cols-1 md:grid-cols-3; }
+
+/* ===== העלאת תמונה ===== */
+.upload                  { @apply relative bg-cream-50 border-2 border-dashed border-gray-300 rounded-2xl p-8 sm:p-10 text-center cursor-pointer transition-all duration-200 min-h-[200px] flex items-center justify-center; }
+@media (hover: hover) { .upload:hover { @apply border-brand-400 bg-cream-100; } }
+.upload.dragover         { @apply border-brand-500 bg-brand-50 scale-[1.01]; }
+.upload.has-preview      { @apply p-0 border-solid border-transparent bg-white; }
+
+/* מסך פתיחה (אין תצוגה מקדימה) */
+.upload__placeholder     { @apply flex flex-col items-center gap-2; }
+.upload__icon            { @apply w-14 h-14 rounded-full bg-brand-100 text-brand-500 text-2xl inline-flex items-center justify-center mb-2; }
+.upload__placeholder strong { @apply text-base sm:text-lg font-bold text-gray-800; }
+.upload__placeholder small  { @apply text-xs sm:text-sm text-gray-500; }
+
+/* תצוגה מקדימה */
+.upload__preview         { @apply relative w-full rounded-2xl overflow-hidden; }
+.upload__preview img     { @apply w-full max-h-[400px] object-cover block; }
+.upload__remove          { @apply absolute top-3 end-3 inline-flex items-center gap-1.5 bg-red-600 text-white text-xs sm:text-sm font-bold px-3 py-1.5 rounded-full border-0 cursor-pointer shadow-warm transition-all duration-200; }
+@media (hover: hover) { .upload__remove:hover { @apply bg-red-700 -translate-y-0.5; } }
+
+/* ===== רכיבים ===== */
+.ingredients             { @apply list-none p-0 m-0 flex flex-col gap-3; }
+.ingredients__row        { @apply grid items-center gap-2 sm:gap-3 bg-cream-50 border border-cream-200 rounded-xl p-3;
+                           grid-template-columns: 1fr 90px 120px auto; }
+.ingredients__cell       { @apply min-w-0; }
+.ingredients__cell--custom { @apply col-span-full; }
+.ingredients__remove     { @apply w-10 h-10 inline-flex items-center justify-center bg-white border border-gray-200 text-red-600 rounded-lg cursor-pointer transition-all duration-200; }
+.ingredients__remove[disabled] { @apply opacity-40 cursor-not-allowed; }
+@media (hover: hover) {
+  .ingredients__remove:not([disabled]):hover { @apply bg-red-600 text-white border-red-600; }
+}
+
+@media (max-width: 639px) {
+  /* במובייל - גריד דחוס יותר: שם רכיב בשורה לבד, אחר כך כמות+יחידה+מחיקה */
+  .ingredients__row      { grid-template-columns: 1fr 1fr auto; gap: 0.5rem; }
+  .ingredients__cell--product { grid-column: 1 / -1; }
+}
+
+/* כפתור הוספת רכיב */
+.btn-add                 { @apply inline-flex items-center justify-center gap-2 self-start bg-white border-2 border-dashed border-brand-300 text-brand-500 px-5 py-2.5 rounded-xl text-sm font-bold cursor-pointer transition-all duration-200 mt-2; }
+@media (hover: hover) { .btn-add:hover { @apply bg-brand-50 border-brand-500; } }
+
+/* ===== שורת פעולות תחתונה ===== */
+.form-actions            { @apply flex flex-col-reverse sm:flex-row gap-3 sm:justify-end sm:items-center bg-white rounded-2xl shadow-soft border border-gray-100 px-5 sm:px-7 py-4 sticky bottom-4; }
+
+/* כפתורים */
+.btn                     { @apply inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full font-bold text-sm sm:text-base border-0 cursor-pointer transition-all duration-200 min-w-[140px]; }
+.btn[disabled]           { @apply opacity-60 cursor-not-allowed; }
+.btn--cancel             { @apply bg-gray-100 text-gray-700; }
+@media (hover: hover) { .btn--cancel:not([disabled]):hover { @apply bg-gray-200; } }
+.btn--submit             { @apply bg-brand-500 text-white shadow-warm; }
+.btn--submit i           { @apply text-xs; }
+@media (hover: hover) { .btn--submit:not([disabled]):hover { @apply bg-brand-600 -translate-y-0.5; } }
+
+/* ספינר קטן בתוך הכפתור */
+.spinner-small           { @apply w-4 h-4 border-2 border-white/40 border-t-white rounded-full animate-spin inline-block; }

@@ -1,0 +1,122 @@
+<div class="auth">
+
+  <!-- צד שמאל (בדסקטופ) - פאנל מותג -->
+  <aside class="auth__brand">
+    <div class="auth__brand-overlay"></div>
+    <div class="auth__brand-content">
+      <a routerLink="/" class="auth__logo">TASTE<span>.</span></a>
+      <p class="auth__tagline">סיפור של אוכל וטעם, מתכון אחד בכל פעם.</p>
+      <span class="auth__bottom-line">קהילת אוהבי הבישול שלנו</span>
+    </div>
+  </aside>
+
+  <!-- צד ימין - טופס -->
+  <main class="auth__form-wrap">
+    <div class="auth__form-card">
+
+      <!-- לוגו מובייל -->
+      <a routerLink="/" class="auth__mobile-logo">TASTE<span>.</span></a>
+
+      <!-- כותרת -->
+      <header class="auth__header">
+        <span class="auth__eyebrow">ברוכים השבים</span>
+        <h1 class="auth__title">התחברות לחשבון</h1>
+        <p class="auth__subtitle">שמחים לראות אתכם שוב!</p>
+      </header>
+
+      <!-- טופס -->
+      <form (ngSubmit)="login()" #loginForm="ngForm" class="auth__form" novalidate>
+
+        <!-- שם משתמש / אימייל -->
+        <div class="field">
+          <label for="username" class="field__label">שם משתמש או אימייל</label>
+          <input
+            type="text"
+            id="username"
+            name="username"
+            [(ngModel)]="loginData.username"
+            required
+            minlength="3"
+            placeholder="הזינו שם משתמש או אימייל"
+            [disabled]="isLoading"
+            #usernameInput="ngModel"
+            class="field__input"
+            [class.input-invalid]="usernameInput.invalid && usernameInput.touched"
+            [class.input-valid]="usernameInput.valid && usernameInput.touched">
+
+          @if (usernameInput.invalid && usernameInput.touched) {
+            <div class="field__error">
+              @if (usernameInput.errors!['required']) { <span>שם משתמש או אימייל הוא שדה חובה</span> }
+              @if (usernameInput.errors!['minlength']) { <span>חייב להכיל לפחות 3 תווים</span> }
+            </div>
+          }
+        </div>
+
+        <!-- סיסמה -->
+        <div class="field">
+          <label for="password" class="field__label">סיסמה</label>
+          <div class="password-wrap">
+            <input
+              [type]="showPassword ? 'text' : 'password'"
+              id="password"
+              name="password"
+              [(ngModel)]="loginData.password"
+              required
+              minlength="6"
+              placeholder="הסיסמה שלך"
+              [disabled]="isLoading"
+              #passwordInput="ngModel"
+              class="field__input"
+              [class.input-invalid]="passwordInput.invalid && passwordInput.touched"
+              [class.input-valid]="passwordInput.valid && passwordInput.touched">
+
+            <button type="button" class="password-toggle" (click)="togglePassword()" aria-label="הצג/הסתר סיסמה">
+              <i [class]="showPassword ? 'fa fa-eye-slash' : 'fa fa-eye'"></i>
+            </button>
+          </div>
+
+          @if (passwordInput.invalid && passwordInput.touched) {
+            <div class="field__error">
+              @if (passwordInput.errors!['required']) { <span>סיסמה היא שדה חובה</span> }
+              @if (passwordInput.errors!['minlength']) {
+                <span>הסיסמה חייבת להכיל לפחות 6 תווים (נוכחי: {{ passwordInput.value?.length || 0 }})</span>
+              }
+            </div>
+          }
+        </div>
+
+        <!-- כפתור התחברות -->
+        <button type="submit" class="btn btn--submit" [disabled]="loginForm.invalid || isLoading">
+          @if (isLoading) {
+            <span class="spinner-small"></span><span>מתחבר...</span>
+          } @else {
+            <i class="fas fa-arrow-left-to-bracket"></i><span>התחבר</span>
+          }
+        </button>
+
+      </form>
+
+      <!-- הודעות מהשרת -->
+      @if (errorMessage) {
+        <div class="alert alert--error">
+          <i class="fas fa-circle-exclamation"></i>
+          <span>{{ errorMessage }}</span>
+        </div>
+      }
+      @if (successMessage) {
+        <div class="alert alert--success">
+          <i class="fas fa-circle-check"></i>
+          <span>{{ successMessage }}</span>
+        </div>
+      }
+
+      <!-- מעבר לרישום -->
+      <p class="auth__switch">
+        עדיין אין לכם חשבון?
+        <a routerLink="/register">הירשמו כאן <i class="fas fa-arrow-left"></i></a>
+      </p>
+
+    </div>
+  </main>
+
+</div>

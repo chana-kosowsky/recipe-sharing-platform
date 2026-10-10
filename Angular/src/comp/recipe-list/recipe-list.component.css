@@ -1,0 +1,117 @@
+/* ===== מבנה הדף ===== */
+.recipes-page    { @apply bg-white min-h-screen; }
+
+/* ===== כותרת עליונה - באנר עריכתי ===== */
+.recipes-hero          { @apply bg-cream-50 border-b border-cream-200; }
+.recipes-hero__inner   { @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-14 text-center; }
+.recipes-hero__eyebrow { @apply inline-block text-[11px] sm:text-xs font-bold text-brand-500 uppercase tracking-[0.3em] mb-3; }
+.recipes-hero__title   { @apply text-4xl sm:text-5xl md:text-6xl font-extrabold text-gray-900 tracking-tight leading-none; }
+.recipes-hero__dot     { @apply text-brand-500; }
+.recipes-hero__subtitle{ @apply text-base sm:text-lg text-gray-600 mt-3 sm:mt-4; }
+.recipes-hero__subtitle strong { @apply text-brand-500 font-extrabold; }
+
+/* ===== שורת פילטרים ===== */
+.filter-bar          { @apply bg-white border-b border-gray-200 sticky top-16 lg:top-[72px] z-30 shadow-sm; }
+.filter-bar__inner   { @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 md:py-5 flex flex-col lg:flex-row lg:items-end gap-4 lg:gap-6; }
+
+/* קלט חיפוש - בולט במרכז */
+.filter-search        { @apply relative flex-1 min-w-0; }
+.filter-search__icon  { @apply absolute top-1/2 -translate-y-1/2 start-4 text-gray-400 pointer-events-none; }
+.filter-search__input { @apply w-full ps-11 pe-10 py-3 bg-cream-50 border border-gray-200 rounded-full text-sm sm:text-base outline-none transition-all duration-200; }
+.filter-search__input:focus { @apply bg-white border-brand-300 ring-2 ring-brand-100; }
+.filter-search__clear { @apply absolute top-1/2 -translate-y-1/2 end-3 w-7 h-7 rounded-full bg-gray-200 text-gray-600 border-0 cursor-pointer flex items-center justify-center transition-colors duration-200; }
+@media (hover: hover) { .filter-search__clear:hover { @apply bg-brand-500 text-white; } }
+
+/* קבוצת פילטר - תווית + תוכן */
+.filter-group   { @apply flex flex-col gap-1.5 shrink-0; }
+.filter-label   { @apply text-[11px] font-bold text-gray-500 uppercase tracking-wider; }
+
+/* תפריט נפתח לקטגוריה */
+.filter-select  { @apply bg-cream-50 border border-gray-200 rounded-full ps-4 pe-9 py-2.5 text-sm font-semibold text-gray-800 outline-none cursor-pointer transition-all duration-200 appearance-none;
+                  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%23666'%3E%3Cpath fill-rule='evenodd' d='M5.23 7.21a.75.75 0 011.06.02L10 11.06l3.71-3.83a.75.75 0 111.08 1.04l-4.25 4.39a.75.75 0 01-1.08 0L5.21 8.27a.75.75 0 01.02-1.06z' clip-rule='evenodd'/%3E%3C/svg%3E");
+                  background-repeat: no-repeat;
+                  background-position: left 0.75rem center;
+                  background-size: 1rem; }
+.filter-select:focus { @apply bg-white border-brand-300 ring-2 ring-brand-100; }
+
+/* גלולות סוג + מיון */
+.filter-pills   { @apply flex flex-wrap gap-2; }
+.pill           { @apply inline-flex items-center gap-1.5 bg-white border border-gray-200 text-gray-700 text-sm font-semibold px-4 py-2 rounded-full cursor-pointer transition-all duration-200; }
+.pill i         { @apply text-xs text-brand-500; }
+@media (hover: hover) { .pill:hover { @apply border-brand-300 -translate-y-0.5; } }
+.pill.active    { @apply bg-brand-500 text-white border-brand-500 shadow-warm; }
+.pill.active i  { @apply text-white; }
+
+/* כפתור איפוס */
+.filter-reset   { @apply inline-flex items-center gap-1.5 self-start lg:self-end bg-gray-900 text-white text-sm font-bold px-4 py-2.5 rounded-full border-0 cursor-pointer transition-colors duration-200; }
+.filter-reset i { @apply text-xs; }
+@media (hover: hover) { .filter-reset:hover { @apply bg-brand-500; } }
+
+/* ===== תוכן ראשי ===== */
+.recipes-main   { @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12; }
+
+/* ===== רשת מתכונים ===== */
+.recipes-grid               { @apply grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-5 md:gap-6 list-none p-0 m-0; }
+
+.recipe-card                { @apply bg-white rounded-2xl overflow-hidden cursor-pointer border border-gray-100 shadow-sm transition-all duration-300 flex flex-col h-full; }
+.recipe-card:active         { @apply scale-[0.98]; }
+@media (hover: hover) {
+  .recipe-card:hover        { @apply -translate-y-1 shadow-warm border-brand-200; }
+  .recipe-card:hover .recipe-card__img    { transform: scale(1.06); }
+  .recipe-card:hover .recipe-card__link i { @apply -translate-x-1; }
+}
+
+/* מדיה - תמונה + צ'יפים */
+.recipe-card__media         { @apply relative aspect-[4/3] overflow-hidden; }
+.recipe-card__img           { @apply w-full h-full object-cover transition-transform duration-[600ms]; }
+.recipe-card__category      { @apply absolute top-2.5 start-2.5 sm:top-3 sm:start-3 bg-white/95 backdrop-blur text-gray-800 text-[10px] sm:text-xs font-bold px-2.5 py-1 rounded-full uppercase tracking-wider shadow-sm; }
+.recipe-card__time          { @apply absolute bottom-2.5 end-2.5 sm:bottom-3 sm:end-3 inline-flex items-center gap-1 bg-black/65 backdrop-blur text-white text-[10px] sm:text-xs font-semibold px-2.5 py-1 rounded-full; }
+.recipe-card__time i        { @apply text-[10px]; }
+
+/* גוף הכרטיס */
+.recipe-card__body          { @apply p-3 sm:p-4 flex flex-col gap-2 flex-1; }
+.recipe-card__title         { @apply text-sm sm:text-base md:text-lg font-bold text-gray-900 leading-snug line-clamp-2 min-h-[2.6em]; }
+.recipe-card__author        { @apply text-xs sm:text-sm text-gray-500 m-0; }
+.recipe-card__author strong { @apply text-gray-700 font-semibold; }
+
+/* תחתית - דירוג + קישור */
+.recipe-card__footer        { @apply flex items-center justify-between mt-auto pt-2 border-t border-gray-100; }
+.recipe-card__rating        { @apply inline-flex items-center gap-1 text-sm font-bold text-gray-800; }
+.recipe-card__rating i      { @apply text-yellow-400 text-xs; }
+.recipe-card__link          { @apply inline-flex items-center gap-1 text-xs sm:text-sm font-bold text-brand-500; }
+.recipe-card__link i        { @apply text-xs transition-transform duration-200; }
+
+/* ===== מצבי טעינה/שגיאה/ריקות ===== */
+.state-card                 { @apply flex flex-col items-center justify-center text-center py-16 md:py-24 px-4; }
+.state-card p               { @apply text-base sm:text-lg text-gray-600 m-0; }
+
+/* טעינה */
+.state-card--loading        { @apply text-brand-500; }
+.spinner                    { @apply w-12 h-12 border-4 border-brand-100 border-t-brand-500 rounded-full animate-spin mb-4; }
+
+/* שגיאה - באנר אדמדם */
+.state-card--error          { @apply bg-red-50 border border-red-200 rounded-2xl text-red-700; }
+.state-card--error i        { @apply text-3xl mb-3; }
+
+/* ריק */
+.state-card--empty h2       { @apply text-2xl sm:text-3xl font-extrabold text-gray-900 mb-2 mt-4; }
+.state-card--empty p        { @apply mb-6; }
+.state-card__icon           { @apply w-20 h-20 rounded-full bg-cream-100 flex items-center justify-center text-3xl text-brand-500; }
+
+/* כפתור CTA למצב ריק */
+.btn-primary                { @apply inline-flex items-center gap-2 bg-brand-500 text-white px-6 py-3 rounded-full font-bold text-sm shadow-warm border-0 cursor-pointer transition-all duration-200; }
+.btn-primary i              { @apply text-xs; }
+@media (hover: hover) { .btn-primary:hover { @apply bg-brand-600 -translate-y-0.5; } }
+
+/* ===== התאמות מובייל - שורת פילטר קומפקטית ===== */
+@media (max-width: 1023.98px) {
+  .filter-bar             { @apply static; }   /* לא דביק במובייל כדי לא לתפוס מסך */
+  .filter-bar__inner      { @apply gap-3 py-3; }
+  .filter-search__input   { @apply text-sm py-2.5; }
+  .filter-group           { @apply w-full; }
+  .filter-pills           { @apply overflow-x-auto flex-nowrap -mx-1 px-1;
+                            scrollbar-width: none; }
+  .filter-pills::-webkit-scrollbar { display: none; }
+  .pill                   { @apply shrink-0; }
+  .filter-reset           { @apply w-full justify-center; }
+}
