@@ -21,4 +21,5 @@ instance/
 *.db
 
 # העלאות משתמשים (אם נשמרות מקומית)
-uploads/
+uploads/*
+!uploads/.gitkeep
